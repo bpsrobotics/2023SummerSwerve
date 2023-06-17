@@ -9,7 +9,7 @@ import com.revrobotics.SparkMaxAbsoluteEncoder.Type
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
-import frc.robot.Constants.ModuleConstants
+import com.team2898.robot.Constants.ModuleConstants
 
 class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset: Double) {
     private val m_drivingSparkMax: CANSparkMax

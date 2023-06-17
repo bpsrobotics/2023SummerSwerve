@@ -1,12 +1,14 @@
 package com.team2898.robot.commands
 
 //The commands for both the driver and operator
-//import com.bpsrobotics.engine.utils.`M/s`
+//import com.com.engine.utils.`M/s`
 //import com.team2898.robot.Constants.ArmHeights.*
 //import com.team2898.robot.Field
 //import com.team2898.robot.OI
 //import com.team2898.robot.subsystems.Arm
 import com.team2898.robot.subsystems.Drivetrain
+import com.team2898.robot.OI
+
 import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.trajectory.Trajectory
@@ -27,7 +29,7 @@ class TeleOp : CommandBase() {
     }
     // Called every time the scheduler runs while the command is scheduled.
     override fun execute() {
-
+        Drivetrain.drive(OI.throttleX, OI.throttleY, OI.turnX, true, true)
     }
 
     // Called once the command ends or is interrupted.
