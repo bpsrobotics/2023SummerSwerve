@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-package frc.robot.subsystems
+package com.team2898.robot.subsystems
 
 import com.revrobotics.*
 import com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless
@@ -99,22 +99,14 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         m_drivingEncoder.position = 0.0
     }
 
+    /** The current state of the module. */
     val state: SwerveModuleState
-        /**
-         * Returns the current state of the module.
-         *
-         * @return The current state of the module.
-         */
         get() =// Apply chassis angular offset to the encoder position to get the position
                 // relative to the chassis.
             SwerveModuleState(m_drivingEncoder.velocity,
                     Rotation2d(m_turningEncoder.position - m_chassisAngularOffset))
+    /** The current position of the module. */
     val position: SwerveModulePosition
-        /**
-         * Returns the current position of the module.
-         *
-         * @return The current position of the module.
-         */
         get() =// Apply chassis angular offset to the encoder position to get the position
                 // relative to the chassis.
             SwerveModulePosition(

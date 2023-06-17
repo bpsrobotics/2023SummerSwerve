@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-package frc.robot.subsystems
+package com.team2898.robot.subsystems
 
 import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Pose2d
@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.Constants.DriveConstants
 import frc.utils.SwerveUtils
 
-class DriveSubsystem
-/** Creates a new DriveSubsystem.  */
+object Drivetrain
     : SubsystemBase() {
+
     // Create MAXSwerveModules
     private val m_frontLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
@@ -66,12 +66,8 @@ class DriveSubsystem
         ))
     }
 
+    /** Current estimated pose of the robot.*/
     val pose: Pose2d
-        /**
-         * Returns the currently-estimated pose of the robot.
-         *
-         * @return The pose.
-         */
         get() = m_odometry.poseMeters
 
     /**
@@ -160,7 +156,7 @@ class DriveSubsystem
     /**
      * Sets the wheels into an X formation to prevent movement.
      */
-    fun setX() {
+    fun lock() {
         m_frontLeft.setDesiredState(SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)))
         m_frontRight.setDesiredState(SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)))
         m_rearLeft.setDesiredState(SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)))
@@ -193,19 +189,10 @@ class DriveSubsystem
     fun zeroHeading() {
         m_gyro.reset()
     }
-
+    /** The robot's heading in degrees, from -180 to 180 */
     val heading: Double
-        /**
-         * Returns the heading of the robot.
-         *
-         * @return the robot's heading in degrees, from -180 to 180
-         */
         get() = Rotation2d.fromDegrees(m_gyro.angle).degrees
+    /** The turn rate of the robot, in degrees per second */
     val turnRate: Double
-        /**
-         * Returns the turn rate of the robot.
-         *
-         * @return The turn rate of the robot, in degrees per second
-         */
         get() = m_gyro.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
 }
