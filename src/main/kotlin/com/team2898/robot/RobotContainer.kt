@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 //import com.team2898.robot.Constants.OperatorConstants
-import com.team2898.robot.commands.Autos
-import com.team2898.robot.commands.ExampleCommand
 import com.team2898.robot.subsystems.ExampleSubsystem
 
 /**
