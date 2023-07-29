@@ -3,17 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 package com.team2898.robot.subsystems
 
+import com.ctre.phoenix.motorcontrol.NeutralMode
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode
 import com.ctre.phoenix.motorcontrol.can.TalonSRX
-import com.revrobotics.*
+import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type
-import com.team2898.robot.Constants
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.kinematics.SwerveModulePosition
-import edu.wpi.first.math.kinematics.SwerveModuleState
+import com.revrobotics.RelativeEncoder
+import com.revrobotics.SparkMaxPIDController
 import com.team2898.robot.Constants.ModuleConstants
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.SimpleMotorFeedforward
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.kinematics.SwerveModulePosition
+import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.AnalogEncoder
 
 class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, turningEncoderID: Int, chassisAngularOffset: Double) {
@@ -92,14 +94,17 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, turningEncoderID: In
         //m_turningPIDController.setOutputRange(ModuleConstants.kTurningMinOutput,
         //        ModuleConstants.kTurningMaxOutput)
         m_drivingSparkMax.idleMode = ModuleConstants.kDrivingMotorIdleMode
-        m_turningTalon. = ModuleConstants.kTurningMotorIdleMode
+        m_turningTalon.setNeutralMode(NeutralMode.Brake)
         m_drivingSparkMax.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit)
-        m_turningTalon.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit)
+        m_turningTalon.configContinuousCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit)
 
         // Save the SPARK MAX configurations. If a SPARK MAX browns out during
         // operation, it will maintain the above configurations.
         m_drivingSparkMax.burnFlash()
-        m_turningTalon.
+        m_turningTalon.config_kP(0, ModuleConstants.kTurningP)
+        m_turningTalon.config_kI(0, ModuleConstants.kTurningI)
+        m_turningTalon.config_kD(0, ModuleConstants.kTurningD)
+
         m_chassisAngularOffset = chassisAngularOffset
         m_desiredState.angle = Rotation2d(m_turningEncoder.absolutePosition)
         m_drivingEncoder.position = 0.0
@@ -132,11 +137,12 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, turningEncoderID: In
 
         // Optimize the reference state to avoid spinning further than 90 degrees.
         val optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
-                Rotation2d(m_turningEncoder.position))
+                Rotation2d(m_turningEncoder.absolutePosition))
 
         // Command driving and turning SPARKS MAX towards their respective setpoints.
         m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity)
-        m_turningPIDController.setReference(optimizedDesiredState.angle.radians, CANSparkMax.ControlType.kPosition)
+        m_turningTalon.set(TalonSRXControlMode.Velocity, optimizedDesiredState.speedMetersPerSecond)
+        //setReference(optimizedDesiredState.angle.radians, CANSparkMax.ControlType.kPosition)
         m_desiredState = desiredState
     }
 
