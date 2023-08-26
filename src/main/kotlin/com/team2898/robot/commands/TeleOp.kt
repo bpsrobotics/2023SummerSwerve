@@ -6,17 +6,9 @@ package com.team2898.robot.commands
 //import com.team2898.robot.Field
 //import com.team2898.robot.OI
 //import com.team2898.robot.subsystems.Arm
-import com.team2898.robot.subsystems.Drivetrain
-import com.team2898.robot.OI
 
-import edu.wpi.first.math.filter.SlewRateLimiter
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.trajectory.Trajectory
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.PneumaticHub
-import edu.wpi.first.wpilibj.drive.DifferentialDrive
-import edu.wpi.first.wpilibj.drive.DifferentialDrive.curvatureDriveIK
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import com.team2898.robot.OI
+import com.team2898.robot.subsystems.Drivetrain
 import edu.wpi.first.wpilibj2.command.CommandBase
 
 class TeleOp : CommandBase() {
