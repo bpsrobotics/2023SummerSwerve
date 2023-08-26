@@ -68,10 +68,11 @@ object Drivetrain
                 m_rearLeft.position,
                 m_rearRight.position
         ))
-        SmartDashboard.putNumber("Encoders/FL Turning Encoder", m_frontLeft.m_turningEncoder.position)
-        SmartDashboard.putNumber("Encoders/FR Turning Encoder", m_frontRight.m_turningEncoder.position)
-        SmartDashboard.putNumber("Encoders/BR Turning Encoder", m_rearRight.m_turningEncoder.position)
-        SmartDashboard.putNumber("Encoders/BL Turning Encoder", m_rearLeft.m_turningEncoder.position)
+        println("UpdatingEncoders")
+        SmartDashboard.putNumber("Encoders/FL_Turning_Encoder", m_frontLeft.m_turningEncoder.position)
+        SmartDashboard.putNumber("Encoders/FR_Turning_Encoder", m_frontRight.m_turningEncoder.position)
+        SmartDashboard.putNumber("Encoders/BR_Turning_Encoder", m_rearRight.m_turningEncoder.position)
+        SmartDashboard.putNumber("Encoders/BL_Turning_Encoder", m_rearLeft.m_turningEncoder.position)
     }
 
     /** Current estimated pose of the robot.*/
