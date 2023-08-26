@@ -3,15 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 package com.team2898.robot.subsystems
 
+import com.team2898.engine.utils.SwerveUtils
+import com.team2898.robot.Constants.DriveConstants
 import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.kinematics.*
+import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry
+import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.WPIUtilJNI
 import edu.wpi.first.wpilibj.ADIS16470_IMU
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import com.team2898.robot.Constants.DriveConstants
-import com.team2898.engine.utils.SwerveUtils
 
 object Drivetrain
     : SubsystemBase() {
@@ -64,6 +68,10 @@ object Drivetrain
                 m_rearLeft.position,
                 m_rearRight.position
         ))
+        SmartDashboard.putNumber("Encoders/FL Turning Encoder", m_frontLeft.m_turningEncoder.position)
+        SmartDashboard.putNumber("Encoders/FR Turning Encoder", m_frontRight.m_turningEncoder.position)
+        SmartDashboard.putNumber("Encoders/BR Turning Encoder", m_rearRight.m_turningEncoder.position)
+        SmartDashboard.putNumber("Encoders/BL Turning Encoder", m_rearLeft.m_turningEncoder.position)
     }
 
     /** Current estimated pose of the robot.*/

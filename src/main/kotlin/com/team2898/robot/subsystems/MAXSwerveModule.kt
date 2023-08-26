@@ -18,8 +18,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset: Double) {
     private val m_drivingSparkMax: CANSparkMax
     private val m_turningSparkMax: CANSparkMax
-    private val m_drivingEncoder: RelativeEncoder
-    private val m_turningEncoder: AbsoluteEncoder
+    public val m_drivingEncoder: RelativeEncoder
+    public val m_turningEncoder: AbsoluteEncoder
     private val m_drivingPIDController: SparkMaxPIDController
     private val m_turningPIDController: SparkMaxPIDController
     private var m_chassisAngularOffset = 0.0
