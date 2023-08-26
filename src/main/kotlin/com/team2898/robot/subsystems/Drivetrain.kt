@@ -4,6 +4,7 @@
 package com.team2898.robot.subsystems
 
 import com.team2898.engine.utils.SwerveUtils
+import com.team2898.robot.Constants
 import com.team2898.robot.Constants.DriveConstants
 import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Pose2d
@@ -21,23 +22,33 @@ object Drivetrain
     : SubsystemBase() {
 
     // Create MAXSwerveModules
-    private val m_frontLeft: MAXSwerveModule = MAXSwerveModule(
+    public val m_frontLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
-            DriveConstants.kFrontLeftChassisAngularOffset)
-    private val m_frontRight: MAXSwerveModule = MAXSwerveModule(
+            DriveConstants.kFrontLeftChassisAngularOffset,
+            DriveConstants.kFrontLeftAnalogInput)
+    public val m_frontRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
-            DriveConstants.kFrontRightChassisAngularOffset)
-    private val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
+            DriveConstants.kFrontRightChassisAngularOffset,
+            DriveConstants.kFrontRightAnalogInput)
+    public val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
-            DriveConstants.kBackLeftChassisAngularOffset)
-    private val m_rearRight: MAXSwerveModule = MAXSwerveModule(
+            DriveConstants.kBackLeftChassisAngularOffset,
+            DriveConstants.kRearleftAnalogInput)
+    public val m_rearRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
-            DriveConstants.kBackRightChassisAngularOffset)
+            DriveConstants.kBackRightChassisAngularOffset,
+            DriveConstants.kRearRightAnalogInput)
+    init{
+        SmartDashboard.putNumber("TurningKs", Constants.ModuleConstants.Ks)
+        SmartDashboard.putNumber("TurningKP", Constants.ModuleConstants.kTurningP)
+        SmartDashboard.putNumber("TurningKI", Constants.ModuleConstants.kTurningI)
+        SmartDashboard.putNumber("TurningKD", Constants.ModuleConstants.kTurningD)
 
+    }
     // The gyro sensor
     private val m_gyro = ADIS16470_IMU()
 
@@ -68,11 +79,19 @@ object Drivetrain
                 m_rearLeft.position,
                 m_rearRight.position
         ))
-        println("UpdatingEncoders")
-        SmartDashboard.putNumber("Encoders/FL_Turning_Encoder", m_frontLeft.m_turningEncoder.position)
-        SmartDashboard.putNumber("Encoders/FR_Turning_Encoder", m_frontRight.m_turningEncoder.position)
-        SmartDashboard.putNumber("Encoders/BR_Turning_Encoder", m_rearRight.m_turningEncoder.position)
-        SmartDashboard.putNumber("Encoders/BL_Turning_Encoder", m_rearLeft.m_turningEncoder.position)
+        Constants.ModuleConstants.Ks = SmartDashboard.getNumber("TurningKs", Constants.ModuleConstants.Ks)
+        Constants.ModuleConstants.kTurningP = SmartDashboard.getNumber("TurningKP", Constants.ModuleConstants.kTurningP)
+        Constants.ModuleConstants.kTurningI = SmartDashboard.getNumber("TurningKI", Constants.ModuleConstants.kTurningI)
+        Constants.ModuleConstants.kTurningD = SmartDashboard.getNumber("TurningKD", Constants.ModuleConstants.kTurningD)
+
+
+        SmartDashboard.putNumber("Encoders/FL_Turning_Encoder", m_frontLeft.readEnc())
+        SmartDashboard.putNumber("Encoders/FR_Turning_Encoder", m_frontRight.readEnc())
+        SmartDashboard.putNumber("Encoders/BR_Turning_Encoder", m_rearRight.readEnc())
+        SmartDashboard.putNumber("Encoders/BL_Turning_Encoder", m_rearLeft.readEnc())
+        SmartDashboard.putNumber("Encoders/BL_Turning_Encoder", m_rearLeft.readEnc())
+        SmartDashboard.putNumber("Encoders/BL_Turning_Encoder", m_rearLeft.readEnc())
+
     }
 
     /** Current estimated pose of the robot.*/

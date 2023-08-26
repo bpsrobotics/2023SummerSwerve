@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package com.team2898.robot
 
+import com.team2898.robot.commands.TeleOp
+import com.team2898.robot.subsystems.Drivetrain
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
@@ -22,6 +24,7 @@ class Robot : TimedRobot() {
      * initialization code.
      */
     override fun robotInit() {
+        Drivetrain
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = RobotContainer()
@@ -64,9 +67,11 @@ class Robot : TimedRobot() {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
+
         if (m_autonomousCommand != null) {
             m_autonomousCommand!!.cancel()
         }
+        TeleOp().schedule()
     }
 
     /** This function is called periodically during operator control.  */

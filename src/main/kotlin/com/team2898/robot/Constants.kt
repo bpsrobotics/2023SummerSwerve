@@ -32,6 +32,13 @@ class Constants {
         const val kMagnitudeSlewRate = 1.8 // percent per second (1 = 100%)
         const val kRotationalSlewRate = 2.0 // percent per second (1 = 100%)
 
+        const val kFrontLeftAnalogInput = 0
+        const val kFrontRightAnalogInput = 3
+        const val kRearRightAnalogInput = 1
+        const val kRearleftAnalogInput = 2
+
+
+
         // Chassis configuration
         val kTrackWidth = Units.inchesToMeters(26.5)
 
@@ -46,10 +53,10 @@ class Constants {
                 Translation2d(-kWheelBase / 2, -kTrackWidth / 2))
 
         // Angular offsets of the modules relative to the chassis in radians
-        const val kFrontLeftChassisAngularOffset = -Math.PI / 2
-        const val kFrontRightChassisAngularOffset = 0.0
-        const val kBackLeftChassisAngularOffset = Math.PI
-        const val kBackRightChassisAngularOffset = Math.PI / 2
+        const val kFrontLeftChassisAngularOffset = 2.191871
+        const val kFrontRightChassisAngularOffset = 3.226360
+        const val kBackLeftChassisAngularOffset = 4.948433
+        const val kBackRightChassisAngularOffset = 5.624184
 
         // SPARK MAX CAN IDs
         const val kFrontLeftDrivingCanId = 2
@@ -97,14 +104,15 @@ class Constants {
         const val kDrivingFF = 1 / kDriveWheelFreeSpeedRps
         const val kDrivingMinOutput = -1.0
         const val kDrivingMaxOutput = 1.0
-        const val kTurningP = 1.0
-        const val kTurningI = 0.0
-        const val kTurningD = 0.0
+        var kTurningP = 2.5
+        var kTurningI = 0.0
+        var kTurningD = 0.0
+        var Ks = 0.085
         const val kTurningFF = 0.0
         const val kTurningMinOutput = -1.0
         const val kTurningMaxOutput = 1.0
-        val kDrivingMotorIdleMode = IdleMode.kBrake
-        val kTurningMotorIdleMode = IdleMode.kBrake
+        val kDrivingMotorIdleMode = IdleMode.kCoast
+        val kTurningMotorIdleMode = IdleMode.kCoast
         const val kDrivingMotorCurrentLimit = 50 // amps
         const val kTurningMotorCurrentLimit = 20 // amps
     }

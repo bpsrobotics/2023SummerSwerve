@@ -22,8 +22,9 @@ object Sugar {
         return times(180 / PI)
     }
 
-    infix fun Double.eqEpsilon(other: Double) = (this - other).absoluteValue < 0.01
-    infix fun Double.eqEpsilon(other: Int) = (this - other).absoluteValue < 0.01
+    fun Double.eqEpsilon(other: Double, maxDistance:Double = 0.01) = (this - other).absoluteValue < maxDistance
+    fun Double.eqEpsilon(other: Int,maxDistance:Double = 0.01) = (this - other).absoluteValue < maxDistance
+
 
     /**
      * Converts the value from degrees to radians
