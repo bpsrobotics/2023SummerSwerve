@@ -11,16 +11,17 @@ class TurningPID(val kP: Double, val kD: Double) {
     var previousError = 0.0
 
     companion object {
+        /** Takes in two radians and finds the lowest distance in radians **/
         fun minCircleDist(anglea: Double, angleb: Double): Double{
             val normal = angleb - anglea
             val wrap = -((2 * PI) * normal.sign - normal)
-            println("normal: $normal wrap: $wrap")
-            val error = if (normal.absoluteValue < wrap.absoluteValue) {
+//            println("normal: ${normal.radiansToDegrees()} wrap: ${wrap.radiansToDegrees()} sign: ${normal.sign} anglea: $anglea angleb: $angleb")
+            val circleDistance = if (normal.absoluteValue < wrap.absoluteValue) {
                 normal
             } else{
                 wrap
             }
-            return error
+            return circleDistance
         }
     }
 
@@ -41,6 +42,6 @@ class TurningPID(val kP: Double, val kD: Double) {
     }
 }
 
-fun main() {
-//    println(TurningPID.minCircleDist(0.)
-}
+//fun main() {
+//    println(TurningPID.minCircleDist(540.degreesToRadians(), 180.degreesToRadians()))
+//}
