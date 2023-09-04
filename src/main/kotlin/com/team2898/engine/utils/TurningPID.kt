@@ -1,5 +1,7 @@
 package com.team2898.engine.utils
 
+import com.team2898.engine.utils.Sugar.degreesToRadians
+import com.team2898.engine.utils.Sugar.radiansToDegrees
 import edu.wpi.first.wpilibj.Timer
 import kotlin.math.PI
 import kotlin.math.absoluteValue
@@ -15,7 +17,7 @@ class TurningPID(var kP: Double, var kD: Double) {
         fun minCircleDist(anglea: Double, angleb: Double): Double{
             val normal = angleb - anglea
             val wrap = -((2 * PI) * normal.sign - normal)
-//            println("normal: ${normal.radiansToDegrees()} wrap: ${wrap.radiansToDegrees()} sign: ${normal.sign} anglea: $anglea angleb: $angleb")
+//            println("normal: ${normal} wrap: ${wrap} sign: ${normal.sign} anglea: $anglea angleb: $angleb")
             val circleDistance = if (normal.absoluteValue < wrap.absoluteValue) {
                 normal
             } else{
@@ -45,5 +47,5 @@ class TurningPID(var kP: Double, var kD: Double) {
 }
 
 //fun main() {
-//    println(TurningPID.minCircleDist(540.degreesToRadians(), 180.degreesToRadians()))
+//    println(TurningPID.minCircleDist(0.52, 2 * PI))
 //}

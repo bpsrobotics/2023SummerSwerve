@@ -10,9 +10,10 @@ package com.team2898.robot.commands
 import com.team2898.engine.utils.Sugar.clamp
 import com.team2898.robot.OI
 import com.team2898.robot.subsystems.Drivetrain
+import com.team2898.robot.subsystems.NavX
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.CommandBase
-import kotlin.math.PI
+import kotlin.math.*
 
 class TeleOp : CommandBase() {
     init {
@@ -26,13 +27,25 @@ class TeleOp : CommandBase() {
     }
     // Called every time the scheduler runs while the command is scheduled.
     override fun execute() {
-        SmartDashboard.putNumber("throttleX", OI.throttleX.clamp(-1,1))
-        SmartDashboard.putNumber("throttleY", OI.throttleY.clamp(-1,1))
-        Drivetrain.drive(-OI.throttleY.clamp(-1,1), -OI.throttleX.clamp(-1,1), -OI.turnX, true, true)
+        val yaw = NavX.navx.angle
+        var driverAngle = atan2(OI.translationY, OI.translationX)
+
+        if (!driverAngle.isFinite()){
+            driverAngle = 0.0
+        }
+        val length = sqrt(OI.translationX.pow(2) + OI.translationY.pow(2))
+        val newAngle = driverAngle - yaw
+        val driveX = length * cos(newAngle)
+        val driveY = length * sin(newAngle)
+
+        Drivetrain.drive(driveX, driveY, OI.turnX, true, true)
+//        Drivetrain.drive(OI.translationX, OI.translationY, OI.turnX, true, true)
         //Drivetrain.m_frontRight.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
         //Drivetrain.m_frontLeft.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
         //Drivetrain.m_rearLeft.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
         //Drivetrain.m_rearRight.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
+        SmartDashboard.putNumber("throttleX", OI.translationX.clamp(-1,1))
+        SmartDashboard.putNumber("throttleY", OI.translationY.clamp(-1,1))
 
 
     }
