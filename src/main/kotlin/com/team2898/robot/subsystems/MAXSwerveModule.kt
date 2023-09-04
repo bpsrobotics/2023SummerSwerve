@@ -10,8 +10,8 @@ import com.revrobotics.RelativeEncoder
 import com.revrobotics.SparkMaxPIDController
 import com.team2898.engine.utils.Sugar.clamp
 import com.team2898.engine.utils.Sugar.eqEpsilon
+import com.team2898.engine.utils.TurningPID
 import com.team2898.robot.Constants.ModuleConstants
-import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
@@ -20,13 +20,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlin.math.PI
 import kotlin.math.absoluteValue
 
-class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset: Double, analogPort: Int) {
+class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset: Double, analogPort: Int, private val reversed: Boolean = false) {
     private val m_drivingSparkMax: CANSparkMax
     private val m_turningSparkMax: CANSparkMax
     public val m_drivingEncoder: RelativeEncoder
     public val m_turningEncoder: AnalogEncoder
     private val m_drivingPIDController: SparkMaxPIDController
-    private val m_turningPIDController: PIDController
+    private val m_turningPIDController: TurningPID
     private var m_chassisAngularOffset = 0.0
     private var m_desiredState = SwerveModuleState(0.0, Rotation2d())
 
@@ -49,7 +49,7 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         m_drivingEncoder = m_drivingSparkMax.getEncoder()
         m_turningEncoder = AnalogEncoder(analogPort)
         m_drivingPIDController = m_drivingSparkMax.pidController
-        m_turningPIDController = PIDController(ModuleConstants.kTurningP, ModuleConstants.kTurningI, ModuleConstants.kTurningD)
+        m_turningPIDController = TurningPID(ModuleConstants.kTurningP, ModuleConstants.kTurningD)
         m_drivingPIDController.setFeedbackDevice(m_drivingEncoder)
         //m_turningPIDController.setFeedbackDevice(m_turningEncoder)
 
@@ -88,9 +88,6 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
 
         // Set the PID gains for the turning motor. Note these are example gains, and you
         // may need to tune them for your own robot!
-        m_turningPIDController.p = ModuleConstants.kTurningP
-        m_turningPIDController.i = ModuleConstants.kTurningI
-        m_turningPIDController.d = ModuleConstants.kTurningD
         //m_turningPIDController.ff = ModuleConstants.kTurningFF
         //m_turningPIDController.(ModuleConstants.kTurningMinOutput,
         //    ModuleConstants.kTurningMaxOutput)
@@ -142,16 +139,15 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         correctedDesiredState.angle = desiredState.angle
 
         // Optimize the reference state to avoid spinning further than 90 degrees.
-        val optimizedDesiredState = correctedDesiredState /*SwerveModuleState.optimize(correctedDesiredState,
-            Rotation2d(readEnc()))*/
+        val optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
+            Rotation2d(readEnc())) //correctedDesiredState
 
         // Command driving and turning SPARKS MAX towards their respective setpoints.
         m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity)
-        m_turningPIDController.setpoint = optimizedDesiredState.angle.radians.clamp(0.0, 2*PI)
-        m_turningPIDController.p = ModuleConstants.kTurningP
-        m_turningPIDController.i = ModuleConstants.kTurningI
-        m_turningPIDController.d = ModuleConstants.kTurningD
-        var turningVoltage = m_turningPIDController.calculate(readEnc())
+        m_turningPIDController.setPoint = optimizedDesiredState.angle.radians.clamp(0.0, 2*PI)
+        m_turningPIDController.kP = ModuleConstants.kTurningP
+        m_turningPIDController.kD = ModuleConstants.kTurningD
+        var turningVoltage = m_turningPIDController.motorOutput(readEnc())
         turningVoltage = when{
             turningVoltage.eqEpsilon(0,0.04) -> 0.0
             turningVoltage < 0 -> turningVoltage - ModuleConstants.Ks
@@ -160,8 +156,9 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         SmartDashboard.putNumber("Voltage", turningVoltage)
         SmartDashboard.putNumber("error", (readEnc() - desiredState.angle.radians).absoluteValue)
 
+        //if(reversed) m_turningSparkMax.set(-turningVoltage)
+        //else m_turningSparkMax.set(turningVoltage)
         m_turningSparkMax.set(-turningVoltage)
-
         m_desiredState = desiredState
     }
 

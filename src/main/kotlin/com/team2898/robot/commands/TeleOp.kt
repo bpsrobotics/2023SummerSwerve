@@ -7,6 +7,7 @@ package com.team2898.robot.commands
 //import com.team2898.robot.OI
 //import com.team2898.robot.subsystems.Arm
 
+import com.team2898.engine.utils.Sugar.clamp
 import com.team2898.robot.OI
 import com.team2898.robot.subsystems.Drivetrain
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -20,11 +21,19 @@ class TeleOp : CommandBase() {
     // Called when the command is started.
     override fun initialize() {
         SmartDashboard.putNumber("goal", PI)
+
+
     }
     // Called every time the scheduler runs while the command is scheduled.
     override fun execute() {
-        Drivetrain.drive(OI.throttleX, OI.throttleY, OI.turnX, true, true)
+        SmartDashboard.putNumber("throttleX", OI.throttleX.clamp(-1,1))
+        SmartDashboard.putNumber("throttleY", OI.throttleY.clamp(-1,1))
+        Drivetrain.drive(-OI.throttleY.clamp(-1,1), -OI.throttleX.clamp(-1,1), -OI.turnX, true, true)
         //Drivetrain.m_frontRight.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
+        //Drivetrain.m_frontLeft.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
+        //Drivetrain.m_rearLeft.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
+        //Drivetrain.m_rearRight.setDesiredState(SwerveModuleState(0.0, Rotation2d(SmartDashboard.getNumber("goal", PI))))
+
 
     }
 

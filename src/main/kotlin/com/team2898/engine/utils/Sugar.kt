@@ -58,6 +58,7 @@ object Sugar {
      * Clamps this double to be within the range [min]..[max], inclusive.
      */
     fun Double.clamp(min: Double = 0.0, max: Double = 1.0) = this.coerceIn(min, max)
+    fun Double.clamp(min: Int = 0, max: Int = 1) = this.coerceIn(min*1.0, max*1.0)
 
     /**
      * Finds angle difference between two angles in radians

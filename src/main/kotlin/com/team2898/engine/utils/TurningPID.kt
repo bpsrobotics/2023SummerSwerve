@@ -5,7 +5,7 @@ import kotlin.math.PI
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
-class TurningPID(val kP: Double, val kD: Double) {
+class TurningPID(var kP: Double, var kD: Double) {
     var setPoint = 0.0
     var timePrevious = Timer.getFPGATimestamp()
     var previousError = 0.0
@@ -30,6 +30,8 @@ class TurningPID(val kP: Double, val kD: Double) {
 
 
         val timeDif = timeNow - timePrevious
+        var useSetPoint = setPoint % (2 * PI)
+        if(useSetPoint < 0) { useSetPoint += (2*PI)}
         val error = minCircleDist(sensorValue, setPoint)
         val errorDif = error - previousError
 

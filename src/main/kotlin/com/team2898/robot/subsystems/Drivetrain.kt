@@ -26,17 +26,19 @@ object Drivetrain
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
             DriveConstants.kFrontLeftChassisAngularOffset,
-            DriveConstants.kFrontLeftAnalogInput)
+            DriveConstants.kFrontLeftAnalogInput,
+            true)
     public val m_frontRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
             DriveConstants.kFrontRightChassisAngularOffset,
-            DriveConstants.kFrontRightAnalogInput)
+            DriveConstants.kFrontRightAnalogInput,
+            true)
     public val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
             DriveConstants.kBackLeftChassisAngularOffset,
-            DriveConstants.kRearleftAnalogInput)
+            DriveConstants.kRearLeftAnalogInput)
     public val m_rearRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,

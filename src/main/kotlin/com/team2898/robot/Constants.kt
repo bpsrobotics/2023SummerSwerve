@@ -26,16 +26,16 @@ class Constants {
     object DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        const val kMaxSpeedMetersPerSecond = 4.8
-        const val kMaxAngularSpeed = 2 * Math.PI // radians per second
+        const val kMaxSpeedMetersPerSecond = 2.0
+        const val kMaxAngularSpeed = 2 * Math.PI // radians per second (2*PI)
         const val kDirectionSlewRate = 1.2 // radians per second
         const val kMagnitudeSlewRate = 1.8 // percent per second (1 = 100%)
         const val kRotationalSlewRate = 2.0 // percent per second (1 = 100%)
 
         const val kFrontLeftAnalogInput = 0
         const val kFrontRightAnalogInput = 3
-        const val kRearRightAnalogInput = 1
-        const val kRearleftAnalogInput = 2
+        const val kRearRightAnalogInput = 2
+        const val kRearLeftAnalogInput = 1
 
 
 
@@ -53,10 +53,12 @@ class Constants {
                 Translation2d(-kWheelBase / 2, -kTrackWidth / 2))
 
         // Angular offsets of the modules relative to the chassis in radians
-        const val kFrontLeftChassisAngularOffset = 2.191871
-        const val kFrontRightChassisAngularOffset = 3.226360
-        const val kBackLeftChassisAngularOffset = 4.948433
-        const val kBackRightChassisAngularOffset = 5.624184
+        const val kFrontLeftChassisAngularOffset = 5.417924
+        const val kFrontRightChassisAngularOffset = 0.078225
+        const val kBackLeftChassisAngularOffset = 4.076745
+        const val kBackRightChassisAngularOffset = 1.721466
+
+        //angular
 
         // SPARK MAX CAN IDs
         const val kFrontLeftDrivingCanId = 2
@@ -104,9 +106,9 @@ class Constants {
         const val kDrivingFF = 1 / kDriveWheelFreeSpeedRps
         const val kDrivingMinOutput = -1.0
         const val kDrivingMaxOutput = 1.0
-        var kTurningP = 2.5
+        var kTurningP = 2.0
         var kTurningI = 0.0
-        var kTurningD = 0.0
+        var kTurningD = 0.01
         var Ks = 0.085
         const val kTurningFF = 0.0
         const val kTurningMinOutput = -1.0
