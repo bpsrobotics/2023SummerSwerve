@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.WPIUtilJNI
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -24,25 +23,25 @@ object Drivetrain
     : SubsystemBase() {
 
     // Create MAXSwerveModules
-    private val m_frontLeft: MAXSwerveModule = MAXSwerveModule(
+    val m_frontLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
             DriveConstants.kFrontLeftChassisAngularOffset,
             DriveConstants.kFrontLeftAnalogInput,
             "front_left")
-    private val m_frontRight: MAXSwerveModule = MAXSwerveModule(
+    val m_frontRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
             DriveConstants.kFrontRightChassisAngularOffset,
             DriveConstants.kFrontRightAnalogInput,
         "front_right")
-    private val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
+    val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
             DriveConstants.kBackLeftChassisAngularOffset,
             DriveConstants.kRearLeftAnalogInput,
             "rear_left")
-    private val m_rearRight: MAXSwerveModule = MAXSwerveModule(
+    val m_rearRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
             DriveConstants.kBackRightChassisAngularOffset,
@@ -56,7 +55,6 @@ object Drivetrain
 
     }
     // The gyro sensor
-    private val m_gyro = NavX
 
     // Slew rate filter variables for controlling lateral acceleration
     private var m_currentRotation = 0.0
@@ -67,24 +65,11 @@ object Drivetrain
     private var m_prevTime = WPIUtilJNI.now() * 1e-6
 
     // Odometry class for tracking robot pose
-    var m_odometry = SwerveDriveOdometry(
-            DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(m_gyro.getInvertedAngle()), arrayOf(
-            m_frontLeft.position,
-            m_frontRight.position,
-            m_rearLeft.position,
-            m_rearRight.position
-    ))
+    
 
     override fun periodic() {
         // Update the odometry in the periodic block
-        m_odometry.update(
-                Rotation2d.fromDegrees(m_gyro.getInvertedAngle()), arrayOf(
-                m_frontLeft.position,
-                m_frontRight.position,
-                m_rearLeft.position,
-                m_rearRight.position
-        ))
+        Odometry.update()
         Constants.ModuleConstants.Ks = SmartDashboard.getNumber("TurningKs", Constants.ModuleConstants.Ks)
         Constants.ModuleConstants.kTurningP = SmartDashboard.getNumber("TurningKP", Constants.ModuleConstants.kTurningP)
         Constants.ModuleConstants.kTurningI = SmartDashboard.getNumber("TurningKI", Constants.ModuleConstants.kTurningI)
@@ -104,7 +89,7 @@ object Drivetrain
 
     /** Current estimated pose of the robot.*/
     val pose: Pose2d
-        get() = m_odometry.poseMeters
+        get() = Odometry.SwerveOdometry.poseMeters
 
     /**
      * Resets the odometry to the specified pose.
@@ -112,8 +97,8 @@ object Drivetrain
      * @param pose The pose to which to set the odometry.
      */
     fun resetOdometry(pose: Pose2d?) {
-        m_odometry.resetPosition(
-                Rotation2d.fromDegrees(m_gyro.getInvertedAngle()), arrayOf(
+        Odometry.SwerveOdometry.resetPosition(
+                Rotation2d.fromDegrees(NavX.getInvertedAngle()), arrayOf(
                 m_frontLeft.position,
                 m_frontRight.position,
                 m_rearLeft.position,
@@ -180,7 +165,7 @@ object Drivetrain
         val ySpeedDelivered: Double = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond
         val rotDelivered: Double = m_currentRotation * DriveConstants.kMaxAngularSpeed
         val swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-                if (fieldRelative) ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getInvertedAngle())) else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered))
+                if (fieldRelative) ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(NavX.getInvertedAngle())) else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered))
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
         m_frontLeft.setDesiredState(swerveModuleStates[0])
@@ -223,12 +208,12 @@ object Drivetrain
 
     /** Zeroes the heading of the robot.  */
     fun zeroHeading() {
-        m_gyro.navx.reset()
+        NavX.navx.reset()
     }
     /** The robot's heading in degrees, from -180 to 180 */
     val heading: Double
-        get() = Rotation2d.fromDegrees(m_gyro.getInvertedAngle()).degrees
+        get() = Rotation2d.fromDegrees(NavX.getInvertedAngle()).degrees
     /** The turn rate of the robot, in degrees per second */
     val turnRate: Double
-        get() = m_gyro.navx.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
+        get() = NavX.navx.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
 }
