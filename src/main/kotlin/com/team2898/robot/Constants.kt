@@ -40,10 +40,10 @@ class Constants {
 
 
         // Chassis configuration
-        val kTrackWidth = Units.inchesToMeters(26.5)
+        val kTrackWidth = Units.inchesToMeters(12.0)
 
         // Distance between centers of right and left wheels on robot
-        val kWheelBase = Units.inchesToMeters(26.5)
+        val kWheelBase = Units.inchesToMeters(15.0)
 
         // Distance between front and back wheels on robot
         val kDriveKinematics = SwerveDriveKinematics(
@@ -125,7 +125,7 @@ class Constants {
     }
 
     object AutoConstants {
-        const val kMaxSpeedMetersPerSecond = 3.0
+        const val kMaxSpeedMetersPerSecond = 0.5
         const val kMaxAccelerationMetersPerSecondSquared = 3.0
         const val kMaxAngularSpeedRadiansPerSecond = Math.PI
         const val kMaxAngularSpeedRadiansPerSecondSquared = Math.PI
