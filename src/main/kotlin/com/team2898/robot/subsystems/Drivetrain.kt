@@ -1,7 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-@file:Suppress("SpellCheckingInspection")
+@file:Suppress("SpellCheckingInspection", "unused")
 
 package com.team2898.robot.subsystems
 
@@ -141,11 +141,10 @@ object Drivetrain
             val inputTranslationMag = sqrt(xSpeed.pow(2.0) + ySpeed.pow(2.0))
 
             // Calculate the direction slew rate based on an estimate of the lateral acceleration
-            val directionSlewRate: Double
-            if (m_currentTranslationMag != 0.0) {
-                directionSlewRate = abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag)
+            val directionSlewRate: Double = if (m_currentTranslationMag != 0.0) {
+                abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag)
             } else {
-                directionSlewRate = 500.0 //some high number that means the slew rate is effectively instantaneous
+                500.0 //some high number that means the slew rate is effectively instantaneous
             }
             val currentTime = WPIUtilJNI.now() * 1e-6
             val elapsedTime = currentTime - m_prevTime

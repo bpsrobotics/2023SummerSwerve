@@ -9,13 +9,14 @@ import kotlin.math.sign
 
 /**
  * The Operating Interface object.
- * This is where you put all of the joystick, button, or keyboard inputs.
+ * This is where you put joystick, button, or keyboard inputs.
  *
  * A note about delegated properties, which are used in this object:
  *  A delegated property is where getting (or setting) a field is outsourced
  *  to another object.  Then, whenever you read the property, it asks the
  *  object the property is delegated to for the value.
  */
+@Suppress("unused")
 object OI : SubsystemBase() {
     /**
      * Threshold below which [process] will return 0.
@@ -107,13 +108,13 @@ object OI : SubsystemBase() {
     val operatorTrigger get() = operatorController.trigger
 
 
-    init {
+//    init {
 //        Trigger { operatorController.pov != 0 }.toggleOnTrue(
 //            Commands.startEnd(
 //                Drivetrain::brakeMode,
 //                Drivetrain::coastMode
 //            )
 //        )
-
-    }
+//
+//    }
 }

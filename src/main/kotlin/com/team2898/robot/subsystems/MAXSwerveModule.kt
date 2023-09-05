@@ -20,7 +20,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlin.math.PI
 import kotlin.math.absoluteValue
 
-class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset: Double, analogPort: Int, public val ID: String = "None", private val reversed: Boolean = false) {
+@Suppress("MemberVisibilityCanBePrivate", "PropertyName", "PrivatePropertyName", "RedundantVisibilityModifier",
+    "unused", "SpellCheckingInspection"
+)
+class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset: Double, analogPort: Int, val moduleID: String = "None") {
     private val m_drivingSparkMax: CANSparkMax
     private val m_turningSparkMax: CANSparkMax
     public val m_drivingEncoder: RelativeEncoder
@@ -46,7 +49,7 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         m_turningSparkMax.restoreFactoryDefaults()
 
         // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
-        m_drivingEncoder = m_drivingSparkMax.getEncoder()
+        m_drivingEncoder = m_drivingSparkMax.encoder
         m_turningEncoder = AnalogEncoder(analogPort)
         m_drivingPIDController = m_drivingSparkMax.pidController
         m_turningPIDController = TurningPID(ModuleConstants.kTurningP, ModuleConstants.kTurningD)
@@ -120,9 +123,11 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
                 m_drivingEncoder.position,
                 Rotation2d(readEnc()))
 
-    fun readEnc(): Double {
-        return ((m_turningEncoder.absolutePosition * 2.0 * PI) - m_chassisAngularOffset).circleNormalize()
-    }
+    /**
+     * @return The encoder position and a rotation around a circle in radians
+     */
+    fun readEnc(): Double { return ((m_turningEncoder.absolutePosition * 2.0 * PI) - m_chassisAngularOffset).circleNormalize() }
+
 
     /**
      * Sets the desired state for the module.
@@ -140,7 +145,7 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
 
         // Command driving and turning SPARKS MAX towards their respective setpoints.
         m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity)
-        SmartDashboard.putNumber(ID + "_SetPoint", optimizedDesiredState.angle.radians.circleNormalize())
+        SmartDashboard.putNumber(moduleID + "_SetPoint", optimizedDesiredState.angle.radians.circleNormalize())
         m_turningPIDController.setPoint = optimizedDesiredState.angle.radians.circleNormalize()
         m_turningPIDController.kP = ModuleConstants.kTurningP
         m_turningPIDController.kD = ModuleConstants.kTurningD

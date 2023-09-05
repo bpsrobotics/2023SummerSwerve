@@ -1,4 +1,10 @@
+@file:Suppress("unused", "FunctionName", "SpellCheckingInspection", "LocalVariableName")
+
 package com.team2898.engine.utils
+
+import kotlin.math.abs
+import kotlin.math.floor
+import kotlin.math.sign
 
 object SwerveUtils {
     /**
@@ -9,7 +15,7 @@ object SwerveUtils {
      * @return The new value for `_current` after performing the specified step towards the specified target.
      */
     fun StepTowards(_current: Double, _target: Double, _stepsize: Double): Double {
-        return if (Math.abs(_current - _target) <= _stepsize) {
+        return if (abs(_current - _target) <= _stepsize) {
             _target
         } else if (_target < _current) {
             _current - _stepsize
@@ -27,23 +33,23 @@ object SwerveUtils {
      * This value will always lie in the range 0 to 2*PI (exclusive).
      */
     fun StepTowardsCircular(_current: Double, _target: Double, _stepsize: Double): Double {
-        var _current = _current
-        var _target = _target
-        _current = WrapAngle(_current)
-        _target = WrapAngle(_target)
-        val stepDirection = Math.signum(_target - _current)
-        val difference = Math.abs(_current - _target)
-        return if (difference <= _stepsize) {
-            _target
-        } else if (difference > Math.PI) { //does the system need to wrap over eventually?
-            //handle the special case where you can reach the target in one step while also wrapping
-            if (_current + 2 * Math.PI - _target < _stepsize || _target + 2 * Math.PI - _current < _stepsize) {
-                _target
-            } else {
-                WrapAngle(_current - stepDirection * _stepsize) //this will handle wrapping gracefully
-            }
-        } else {
-            _current + stepDirection * _stepsize
+        //_current = _current
+        //var _target = _target
+        val wrappedCurrent = WrapAngle(_current)
+        val wrappedTarget = WrapAngle(_target)
+        val stepDirection = sign(wrappedTarget - wrappedCurrent)
+        val difference = abs(wrappedCurrent - wrappedTarget)
+        return when {
+            difference <= _stepsize ->   wrappedTarget
+            difference > Math.PI ->
+                //does the system need to wrap over eventually?
+                //handle the special case where you can reach the target in one step while also wrapping
+                if (wrappedCurrent + 2 * Math.PI - wrappedTarget < _stepsize || wrappedTarget + 2 * Math.PI - wrappedCurrent < _stepsize) {
+                    wrappedTarget
+                } else {
+                    WrapAngle(wrappedCurrent - stepDirection * _stepsize) //this will handle wrapping gracefully
+                }
+            else -> wrappedCurrent + stepDirection * _stepsize
         }
     }
 
@@ -54,7 +60,7 @@ object SwerveUtils {
      * @return The (unsigned) minimum difference between the two angles (in radians).
      */
     fun AngleDifference(_angleA: Double, _angleB: Double): Double {
-        val difference = Math.abs(_angleA - _angleB)
+        val difference = abs(_angleA - _angleB)
         return if (difference > Math.PI) 2 * Math.PI - difference else difference
     }
 
@@ -68,9 +74,9 @@ object SwerveUtils {
         return if (_angle == twoPi) { // Handle this case separately to avoid floating point errors with the floor after the division in the case below
             0.0
         } else if (_angle > twoPi) {
-            _angle - twoPi * Math.floor(_angle / twoPi)
+            _angle - twoPi * floor(_angle / twoPi)
         } else if (_angle < 0.0) {
-            _angle + twoPi * (Math.floor(-_angle / twoPi) + 1)
+            _angle + twoPi * (floor(-_angle / twoPi) + 1)
         } else {
             _angle
         }

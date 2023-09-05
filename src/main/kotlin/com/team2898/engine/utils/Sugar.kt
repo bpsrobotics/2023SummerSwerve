@@ -23,28 +23,28 @@ object Sugar {
     }
     /**
      * Returns true if the value is [maxDistance] from [target]
-     * @param other The target value
+     * @param target The target value
      * @param maxDistance The greatest distance from the target value that will still return true
      * @author Ozy
      */
     fun Double.eqEpsilon(target: Double, maxDistance:Double = 0.01) = (this - target).absoluteValue < maxDistance
     /**
      * Returns true if the value is [maxDistance] from [target]
-     * @param other The target value
+     * @param target The target value
      * @param maxDistance The greatest distance from the target value that will still return true
      * @author Ozy
      */
     fun Double.eqEpsilon(target: Int, maxDistance:Double = 0.01) = (this - target).absoluteValue < maxDistance
     /**
      * Returns true if the value is [maxDistance] from [target]
-     * @param other The target value
+     * @param target The target value
      * @param maxDistance The greatest distance from the target value that will still return true
      * @author Ozy
      */
     fun Int.eqEpsilon(target: Double, maxDistance:Double = 0.01) = (this - target).absoluteValue < maxDistance
     /**
      * Returns true if the value is [maxDistance] from [target]
-     * @param other The target value
+     * @param target The target value
      * @param maxDistance The greatest distance from the target value that will still return true
      * @author Ozy
      */

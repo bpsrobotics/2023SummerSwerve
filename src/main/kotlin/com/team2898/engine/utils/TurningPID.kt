@@ -1,23 +1,26 @@
 package com.team2898.engine.utils
 
-import com.team2898.engine.utils.Sugar.degreesToRadians
-import com.team2898.engine.utils.Sugar.radiansToDegrees
 import edu.wpi.first.wpilibj.Timer
 import kotlin.math.PI
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
+/**
+ * PID Controller used for motors rotating to a specific angle
+ * @author Anthony, Mike
+ */
+@Suppress("MemberVisibilityCanBePrivate")
 class TurningPID(var kP: Double, var kD: Double) {
     var setPoint = 0.0
     var timePrevious = Timer.getFPGATimestamp()
     var previousError = 0.0
 
     companion object {
-        /** Takes in two radians and finds the lowest distance in radians **/
-        fun minCircleDist(anglea: Double, angleb: Double): Double{
-            val normal = angleb - anglea
+        /** Finds the smallest distance between [angleA] and [angleB] by wrapping around the circle **/
+        fun minCircleDist(angleA: Double, angleB: Double): Double{
+            val normal = angleB - angleA
             val wrap = -((2 * PI) * normal.sign - normal)
-//            println("normal: ${normal} wrap: ${wrap} sign: ${normal.sign} anglea: $anglea angleb: $angleb")
+//            println("normal: ${normal} wrap: ${wrap} sign: ${normal.sign} angleA: $angleA angleB: $angleB")
             val circleDistance = if (normal.absoluteValue < wrap.absoluteValue) {
                 normal
             } else{
@@ -27,6 +30,9 @@ class TurningPID(var kP: Double, var kD: Double) {
         }
     }
 
+    /**
+     * @return Voltage that should be given to the motor to reach [setPoint] given [sensorValue], [kP] and [kD]
+     */
     fun motorOutput(sensorValue: Double): Double {
         val timeNow = Timer.getFPGATimestamp()
 

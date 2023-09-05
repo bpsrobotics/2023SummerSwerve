@@ -1,4 +1,4 @@
-@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE")  // Not all of these classes are used
+@file:Suppress("unused", "MemberVisibilityCanBePrivate", "NOTHING_TO_INLINE", "OPT_IN_USAGE", "SpellCheckingInspection")  // Not all of these classes are used
 
 /**
  * A set of value classes that represent a value with a unit.  These value classes are represented
@@ -7,7 +7,7 @@
  * Note: if you specify an argument type as one of the interfaces declared in this file, it will box
  * the type, leading to a performance hit.  _This is likely fine_, because computers are fast.
  */
-package com.bpsrobotics.engine.utils
+package com.team2898.engine.utils
 
 import com.team2898.engine.utils.Sugar.radiansToDegrees
 import kotlin.math.PI
@@ -196,6 +196,7 @@ value class Hertz(override val value: Double) : FrequencyValue {
 
 fun FrequencyValue.toMillis() = Millis(1000 / hertzValue())
 
+@Suppress("GrazieInspection")
 @JvmInline
 value class Milliseconds(override val value: Double) : TimeUnit {
     /**
@@ -302,6 +303,7 @@ value class RGBA(val packed: UInt) {
     val a get() = (packed shr 24).toUByte()
 }
 
+@Suppress("GrazieInspection")
 @JvmInline
 value class HSVA(val packed: UInt) {
     /**
@@ -323,7 +325,7 @@ value class HSVA(val packed: UInt) {
 
 @Suppress("EXPERIMENTAL_API_USAGE", "FINAL_UPPER_BOUND")
 @JvmInline
-value class RGBAArray(val array: UIntArray) {
+value class RGBAArray @OptIn(ExperimentalUnsignedTypes::class) constructor(val array: UIntArray) {
     constructor(size: Int) : this(UIntArray(size))
 
     companion object {

@@ -7,7 +7,6 @@ package com.team2898.robot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import edu.wpi.first.wpilibj2.command.button.Trigger
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,6 +19,7 @@ class RobotContainer {
     //private val m_exampleSubsystem = ExampleSubsystem()
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
+    @Suppress("PrivatePropertyName", "unused")
     private val m_driverController = CommandXboxController(0)
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
@@ -30,7 +30,7 @@ class RobotContainer {
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * [Trigger.Trigger] constructor with an arbitrary
+     * Trigger.Trigger constructor with an arbitrary
      * predicate, or via the named factories in [ ]'s subclasses for [ ]/[ PS4][edu.wpi.first.wpilibj2.command.button.CommandPS4Controller] controllers or [Flight][edu.wpi.first.wpilibj2.command.button.CommandJoystick].
      */
     private fun configureBindings() {
