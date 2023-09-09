@@ -1,5 +1,6 @@
 package com.team2898.engine.utils
 
+import com.team2898.engine.utils.Sugar.circleNormalize
 import edu.wpi.first.wpilibj.Timer
 import kotlin.math.PI
 import kotlin.math.absoluteValue
@@ -16,7 +17,7 @@ class TurningPID(var kP: Double, var kD: Double) {
     var previousError = 0.0
 
     companion object {
-        /** Finds the smallest distance between [angleA] and [angleB] by wrapping around the circle **/
+        /** Finds the smallest distance between [angleA] and [angleB] by wrapping around the circle in radians **/
         fun minCircleDist(angleA: Double, angleB: Double): Double{
             val normal = angleB - angleA
             val wrap = -((2 * PI) * normal.sign - normal)
@@ -38,9 +39,24 @@ class TurningPID(var kP: Double, var kD: Double) {
 
 
         val timeDif = timeNow - timePrevious
-        var useSetPoint = setPoint % (2 * PI)
-        if(useSetPoint < 0) { useSetPoint += (2*PI)}
-        val error = minCircleDist(sensorValue, setPoint)
+        val useSetPoint = setPoint.circleNormalize()
+        val error = minCircleDist(sensorValue, useSetPoint)
+        val errorDif = error - previousError
+
+        val derivative = kD * ((errorDif) / (timeDif))
+
+
+        previousError = error
+        timePrevious = Timer.getFPGATimestamp()
+        return error * kP + derivative
+    }
+    fun turnspeedOutput(sensorValue: Double): Double {
+        val timeNow = Timer.getFPGATimestamp()
+
+
+        val timeDif = timeNow - timePrevious
+        var useSetPoint = setPoint.circleNormalize()
+        val error = minCircleDist(sensorValue, useSetPoint)/(2* PI)
         val errorDif = error - previousError
 
         val derivative = kD * ((errorDif) / (timeDif))

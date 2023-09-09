@@ -43,10 +43,10 @@ class Constants {
 
 
         // Chassis configuration
-        val kTrackWidth = Units.inchesToMeters(12.0)
+        val kTrackWidth = Units.inchesToMeters(15.0)
 
         // Distance between centers of right and left wheels on robot
-        val kWheelBase = Units.inchesToMeters(15.0)
+        val kWheelBase = Units.inchesToMeters(12.0)
 
         // Distance between front and back wheels on robot
         val kDriveKinematics = SwerveDriveKinematics(
@@ -109,10 +109,10 @@ class Constants {
         const val kDrivingFF = 1 / kDriveWheelFreeSpeedRps
         const val kDrivingMinOutput = -1.0
         const val kDrivingMaxOutput = 1.0
-        var kTurningP = 2.0
+        var kTurningP = 3.0
         var kTurningI = 0.0
-        var kTurningD = 0.01
-        var Ks = 0.085
+        var kTurningD = 0.03
+        var Ks = 0.03
         const val kTurningFF = 0.0
         const val kTurningMinOutput = -1.0
         const val kTurningMaxOutput = 1.0

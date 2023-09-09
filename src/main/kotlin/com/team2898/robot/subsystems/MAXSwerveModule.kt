@@ -153,13 +153,13 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         var drivingVoltage = m_drivingSparkMax.busVoltage
         var turningVoltage = m_turningPIDController.motorOutput(readEnc())
         turningVoltage = when{
-            turningVoltage.eqEpsilon(0,0.001) -> 0.0
+            turningVoltage.eqEpsilon(0,0.01) -> 0.0
             turningVoltage < 0 -> turningVoltage - ModuleConstants.Ks
             else -> turningVoltage + ModuleConstants.Ks
         }
         SmartDashboard.putNumber("Voltage", turningVoltage)
         SmartDashboard.putNumber("error", (readEnc() - desiredState.angle.radians).absoluteValue)
-        if(readEnc().eqEpsilon(desiredState.angle.radians,0.03)) turningVoltage = 0.0
+        if(readEnc().eqEpsilon(desiredState.angle.radians,0.09)) turningVoltage = 0.0
 
         //if(reversed) m_turningSparkMax.set(-turningVoltage)
         //else m_turningSparkMax.set(turningVoltage)
