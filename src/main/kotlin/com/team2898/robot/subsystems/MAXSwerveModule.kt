@@ -39,6 +39,7 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
      * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
      * Encoder.
      */
+
     init {
         m_drivingSparkMax = CANSparkMax(drivingCANId, kBrushless)
         m_turningSparkMax = CANSparkMax(turningCANId, kBrushed)
@@ -149,6 +150,7 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         m_turningPIDController.setPoint = optimizedDesiredState.angle.radians.circleNormalize()
         m_turningPIDController.kP = ModuleConstants.kTurningP
         m_turningPIDController.kD = ModuleConstants.kTurningD
+        var drivingVoltage = m_drivingSparkMax.busVoltage
         var turningVoltage = m_turningPIDController.motorOutput(readEnc())
         turningVoltage = when{
             turningVoltage.eqEpsilon(0,0.001) -> 0.0
@@ -163,6 +165,8 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         //else m_turningSparkMax.set(turningVoltage)
         m_turningSparkMax.set(-turningVoltage)
         m_desiredState = desiredState
+        SmartDashboard.putNumber("turningMotorVoltage" + moduleID, turningVoltage)
+        SmartDashboard.putNumber("drivingMotorVoltage" + moduleID, drivingVoltage)
     }
 
     /** Zeroes all the SwerveModule encoders.  */
