@@ -21,6 +21,9 @@ class Robot : TimedRobot() {
     private var m_autonomousCommand: Command? = null
     private var m_robotContainer: RobotContainer? = null
 
+    lateinit var autoCommand: Command
+    lateinit var robotContainer: RobotContainer
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -29,7 +32,7 @@ class Robot : TimedRobot() {
         Drivetrain
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = RobotContainer()
+        robotContainer = RobotContainer()
     }
 
     /**
@@ -54,10 +57,13 @@ class Robot : TimedRobot() {
 
     /** This autonomous runs the autonomous command selected by your [RobotContainer] class.  */
     override fun autonomousInit() {
-        m_autonomousCommand = m_robotContainer!!.autonomousCommand
+//        m_autonomousCommand = m_robotContainer!!.autonomousCommand
+//
+//        // schedule the autonomous command (example)
+//        m_autonomousCommand!!.schedule()
+        autoCommand = robotContainer.getAutonomousCommand()
 
-        // schedule the autonomous command (example)
-        m_autonomousCommand!!.schedule()
+        autoCommand.let { autoCommand.schedule() }
     }
 
     /** This function is called periodically during autonomous.  */

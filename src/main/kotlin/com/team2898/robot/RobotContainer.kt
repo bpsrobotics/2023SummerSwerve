@@ -4,6 +4,7 @@
 package com.team2898.robot
 
 //import com.team2898.robot.Constants.OperatorConstants
+import com.team2898.robot.commands.autos.TestAuto
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
@@ -49,6 +50,9 @@ class RobotContainer {
          *
          * @return the command to run in autonomous
          */
+    fun getAutonomousCommand(): Command{
+         return TestAuto()
+    }
         // An example command will be run in autonomous
 
             //Autos.exampleAuto(m_exampleSubsystem)
