@@ -15,6 +15,7 @@ object Odometry {
             Drivetrain.m_rearRight.position
         ))
     fun update(){
+        NavX.update()
         SwerveOdometry.update(
             Rotation2d.fromDegrees(NavX.getInvertedAngle()), arrayOf(
                 Drivetrain.m_frontLeft.position,

@@ -1,6 +1,7 @@
 package com.team2898.engine.utils
 
 import com.team2898.engine.utils.Sugar.circleNormalize
+import com.team2898.engine.utils.Sugar.clamp
 import edu.wpi.first.wpilibj.Timer
 import kotlin.math.PI
 import kotlin.math.absoluteValue
@@ -57,6 +58,23 @@ class TurningPID(var kP: Double, var kD: Double) {
         val timeDif = timeNow - timePrevious
         var useSetPoint = setPoint.circleNormalize()
         val error = minCircleDist(sensorValue, useSetPoint)/(2* PI)
+        val errorDif = error - previousError
+
+        val derivative = kD * ((errorDif) / (timeDif))
+
+
+        previousError = error
+        timePrevious = Timer.getFPGATimestamp()
+        return error * kP + derivative
+    }
+    fun turnspeedOutputNoNormalize(sensorValue: Double): Double {
+        val timeNow = Timer.getFPGATimestamp()
+
+
+        val timeDif = timeNow - timePrevious
+        var useSetPoint = setPoint
+
+        val error = ((useSetPoint - sensorValue)/(2* PI)).clamp(-1.0,1.0)
         val errorDif = error - previousError
 
         val derivative = kD * ((errorDif) / (timeDif))

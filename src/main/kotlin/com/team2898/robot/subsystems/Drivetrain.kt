@@ -211,7 +211,7 @@ object Drivetrain
 
     /** Zeroes the heading of the robot.  */
     fun zeroHeading() {
-        NavX.navx.reset()
+        NavX.reset()
     }
     /** The robot's heading in degrees, from -180 to 180 */
     val heading: Double
