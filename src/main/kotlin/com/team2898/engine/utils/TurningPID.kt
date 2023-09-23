@@ -69,5 +69,5 @@ class TurningPID(var kP: Double, var kD: Double) {
 }
 
 //fun main() {
-//    println(TurningPID.minCircleDist(0.52, 2 * PI))
+//    println(TurningPID.minCircleDist(4 * 2 * PI, 2 * PI))
 //}
