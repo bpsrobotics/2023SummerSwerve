@@ -70,11 +70,11 @@ object OI : SubsystemBase() {
     // Squared for better control on turn, cubed on throttle
     /** Driver controller's throttle on the left joystick for the X Axis, from -1 (left) to 1 (right) */
     val translationX
-        get() = -process(driverController.leftX, deadzone = true, square = true)
+        get() = -process(driverController.leftX, deadzone = true, square = false)
 
     /** Driver controller's throttle on the left joystick for the Y Axis, from -1 (down) to 1 (up) */
     val translationY
-        get() = process(-driverController.leftY, deadzone = true, square = true)
+        get() = process(-driverController.leftY, deadzone = true, square = false)
 
     /** Driver controller's throttle on the right joystick for the X Axis, from -1 (left) to 1 (right) */
     val turnX
@@ -82,7 +82,10 @@ object OI : SubsystemBase() {
     /** Driver controller's throttle on the right joystick for the Y Axis, from -1 (down) to 1 (up) */
     val turnY
         get() = -process(driverController.rightY, deadzone = true, square = false)
-
+    val defenseModeButton
+        get() = driverController.yButton
+    val normalModeButton
+        get() = driverController.xButton
 
     val highHat get() = operatorController.pov
     val moving get() = operatorController.getRawButton(7)
