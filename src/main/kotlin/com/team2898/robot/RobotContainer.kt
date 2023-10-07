@@ -5,6 +5,7 @@ package com.team2898.robot
 
 //import com.team2898.robot.Constants.OperatorConstants
 import com.team2898.robot.commands.autos.TestAuto
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
@@ -23,10 +24,13 @@ class RobotContainer {
     @Suppress("PrivatePropertyName", "unused")
     private val m_driverController = CommandXboxController(0)
 
+    private val nullAuto: Command = TestAuto()
+    private var autoCommandChooser: SendableChooser<Command> = SendableChooser()
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
+        autoCommandChooser.setDefaultOption("no auto", nullAuto)
         // Configure the trigger bindings
-        configureBindings()
+//        configureBindings()
     }
 
     /**
@@ -44,7 +48,7 @@ class RobotContainer {
         //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand())
     }
 
-    val autonomousCommand: Command = InstantCommand({})
+//    val autonomousCommand: Command = InstantCommand({})
         /**
          * Use this to pass the autonomous command to the main [Robot] class.
          *

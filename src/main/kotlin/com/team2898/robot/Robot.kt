@@ -28,11 +28,11 @@ class Robot : TimedRobot() {
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
      */
-    override fun robotInit() {
-        Drivetrain
+    override fun robotInit(){
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = RobotContainer()
+        autoCommand = robotContainer.getAutonomousCommand()
     }
 
     /**
