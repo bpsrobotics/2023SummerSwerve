@@ -85,8 +85,6 @@ object Drivetrain
         SmartDashboard.putNumber("Goals/FL_GOAL", m_frontLeft.m_desiredState.angle.radians)
         SmartDashboard.putNumber("Goals/FR_GOAL", m_frontRight.m_desiredState.angle.radians)
 
-        SmartDashboard.putNumber("Pose.X", pose.x)
-        SmartDashboard.putNumber("Pose.y", pose.y)
 
     }
 
