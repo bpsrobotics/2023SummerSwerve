@@ -9,14 +9,13 @@ import kotlin.math.sign
 
 /**
  * The Operating Interface object.
- * This is where you put joystick, button, or keyboard inputs.
+ * This is where you put all of the joystick, button, or keyboard inputs.
  *
  * A note about delegated properties, which are used in this object:
  *  A delegated property is where getting (or setting) a field is outsourced
  *  to another object.  Then, whenever you read the property, it asks the
  *  object the property is delegated to for the value.
  */
-@Suppress("unused")
 object OI : SubsystemBase() {
     /**
      * Threshold below which [process] will return 0.
@@ -70,11 +69,11 @@ object OI : SubsystemBase() {
     // Squared for better control on turn, cubed on throttle
     /** Driver controller's throttle on the left joystick for the X Axis, from -1 (left) to 1 (right) */
     val translationX
-        get() = -process(driverController.leftX, deadzone = true, square = false)
+        get() = -process(driverController.leftX, deadzone = true, square = true)
 
     /** Driver controller's throttle on the left joystick for the Y Axis, from -1 (down) to 1 (up) */
     val translationY
-        get() = process(-driverController.leftY, deadzone = true, square = false)
+        get() = process(-driverController.leftY, deadzone = true, square = true)
 
     /** Driver controller's throttle on the right joystick for the X Axis, from -1 (left) to 1 (right) */
     val turnX
@@ -82,10 +81,7 @@ object OI : SubsystemBase() {
     /** Driver controller's throttle on the right joystick for the Y Axis, from -1 (down) to 1 (up) */
     val turnY
         get() = -process(driverController.rightY, deadzone = true, square = false)
-    val defenseModeButton
-        get() = driverController.yButton
-    val normalModeButton
-        get() = driverController.xButton
+
 
     val highHat get() = operatorController.pov
     val moving get() = operatorController.getRawButton(7)
@@ -111,13 +107,13 @@ object OI : SubsystemBase() {
     val operatorTrigger get() = operatorController.trigger
 
 
-//    init {
+    init {
 //        Trigger { operatorController.pov != 0 }.toggleOnTrue(
 //            Commands.startEnd(
 //                Drivetrain::brakeMode,
 //                Drivetrain::coastMode
 //            )
 //        )
-//
-//    }
+
+    }
 }

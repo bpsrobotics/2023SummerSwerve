@@ -1,8 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-@file:Suppress("unused")
-
 package com.team2898.robot
 
 import com.revrobotics.CANSparkMax.IdleMode
@@ -24,7 +22,6 @@ import edu.wpi.first.math.util.Units
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-@Suppress("MemberVisibilityCanBePrivate")
 class Constants {
     object DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -43,10 +40,10 @@ class Constants {
 
 
         // Chassis configuration
-        val kTrackWidth = Units.inchesToMeters(15.0)
+        val kTrackWidth = Units.inchesToMeters(26.5)
 
         // Distance between centers of right and left wheels on robot
-        val kWheelBase = Units.inchesToMeters(12.0)
+        val kWheelBase = Units.inchesToMeters(26.5)
 
         // Distance between front and back wheels on robot
         val kDriveKinematics = SwerveDriveKinematics(
@@ -109,10 +106,10 @@ class Constants {
         const val kDrivingFF = 1 / kDriveWheelFreeSpeedRps
         const val kDrivingMinOutput = -1.0
         const val kDrivingMaxOutput = 1.0
-        var kTurningP = 3.0
+        var kTurningP = 2.0
         var kTurningI = 0.0
-        var kTurningD = 0.03
-        var Ks = 0.03
+        var kTurningD = 0.01
+        var Ks = 0.085
         const val kTurningFF = 0.0
         const val kTurningMinOutput = -1.0
         const val kTurningMaxOutput = 1.0
@@ -124,12 +121,11 @@ class Constants {
 
     object OIConstants {
         const val kDriverControllerPort = 0
-        @Suppress("SpellCheckingInspection")
         const val kDriveDeadband = 0.05
     }
 
     object AutoConstants {
-        const val kMaxSpeedMetersPerSecond = 0.5
+        const val kMaxSpeedMetersPerSecond = 3.0
         const val kMaxAccelerationMetersPerSecondSquared = 3.0
         const val kMaxAngularSpeedRadiansPerSecond = Math.PI
         const val kMaxAngularSpeedRadiansPerSecondSquared = Math.PI

@@ -1,8 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-@file:Suppress("PrivatePropertyName")
-
 package com.team2898.robot
 
 import com.team2898.robot.commands.TeleOp
@@ -21,18 +19,15 @@ class Robot : TimedRobot() {
     private var m_autonomousCommand: Command? = null
     private var m_robotContainer: RobotContainer? = null
 
-    lateinit var autoCommand: Command
-    lateinit var robotContainer: RobotContainer
-
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
      */
-    override fun robotInit(){
+    override fun robotInit() {
+        Drivetrain
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-        robotContainer = RobotContainer()
-        autoCommand = robotContainer.getAutonomousCommand()
+        m_robotContainer = RobotContainer()
     }
 
     /**
@@ -57,13 +52,12 @@ class Robot : TimedRobot() {
 
     /** This autonomous runs the autonomous command selected by your [RobotContainer] class.  */
     override fun autonomousInit() {
-//        m_autonomousCommand = m_robotContainer!!.autonomousCommand
-//
-//        // schedule the autonomous command (example)
-//        m_autonomousCommand!!.schedule()
-        autoCommand = robotContainer.getAutonomousCommand()
+        m_autonomousCommand = m_robotContainer!!.autonomousCommand
 
-        autoCommand.let { autoCommand.schedule() }
+        // schedule the autonomous command (example)
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand!!.schedule()
+        }
     }
 
     /** This function is called periodically during autonomous.  */
