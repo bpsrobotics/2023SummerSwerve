@@ -64,14 +64,14 @@ class Constants {
         //angular
 
         // SPARK MAX CAN IDs
-        const val kFrontLeftDrivingCanId = 3
+        const val kFrontLeftDrivingCanId = 2
         const val kRearLeftDrivingCanId = 1
         const val kFrontRightDrivingCanId = 4
-        const val kRearRightDrivingCanId = 2
-        const val kFrontLeftTurningCanId = 5
+        const val kRearRightDrivingCanId = 3
+        const val kFrontLeftTurningCanId = 6
         const val kRearLeftTurningCanId = 7
         const val kFrontRightTurningCanId = 8
-        const val kRearRightTurningCanId = 6
+        const val kRearRightTurningCanId = 5
         const val kGyroReversed = false
     }
 
