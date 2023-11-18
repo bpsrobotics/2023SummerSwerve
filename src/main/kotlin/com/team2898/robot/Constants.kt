@@ -32,9 +32,9 @@ class Constants {
         const val kMagnitudeSlewRate = 1.8 // percent per second (1 = 100%)
         const val kRotationalSlewRate = 2.0 // percent per second (1 = 100%)
 
-        const val kFrontLeftAnalogInput = 0
+        const val kFrontLeftAnalogInput = 2
         const val kFrontRightAnalogInput = 3
-        const val kRearRightAnalogInput = 2
+        const val kRearRightAnalogInput = 0
         const val kRearLeftAnalogInput = 1
 
 
@@ -61,14 +61,14 @@ class Constants {
         //angular
 
         // SPARK MAX CAN IDs
-        const val kFrontLeftDrivingCanId = 2
+        const val kFrontLeftDrivingCanId = 3
         const val kRearLeftDrivingCanId = 1
         const val kFrontRightDrivingCanId = 4
-        const val kRearRightDrivingCanId = 3
-        const val kFrontLeftTurningCanId = 6
+        const val kRearRightDrivingCanId = 2
+        const val kFrontLeftTurningCanId = 5
         const val kRearLeftTurningCanId = 7
         const val kFrontRightTurningCanId = 8
-        const val kRearRightTurningCanId = 5
+        const val kRearRightTurningCanId = 6
         const val kGyroReversed = false
     }
 
