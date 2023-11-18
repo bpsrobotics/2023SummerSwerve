@@ -82,6 +82,10 @@ object OI : SubsystemBase() {
     /** Driver controller's throttle on the right joystick for the Y Axis, from -1 (down) to 1 (up) */
     val turnY
         get() = -process(driverController.rightY, deadzone = true, square = false)
+    val leftTrigger
+        get() = driverController.leftTriggerAxis
+    val rightTrigger
+        get() = driverController.rightTriggerAxis
     val defenseModeButton
         get() = driverController.yButton
     val normalModeButton
