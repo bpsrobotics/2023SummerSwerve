@@ -126,6 +126,8 @@ class Constants {
         const val kDriverControllerPort = 0
         @Suppress("SpellCheckingInspection")
         const val kDriveDeadband = 0.05
+        const val kSpeedMultiplierMin = 0.25
+        const val kSpeedMultiplierMax = 1.0
     }
 
     object AutoConstants {
