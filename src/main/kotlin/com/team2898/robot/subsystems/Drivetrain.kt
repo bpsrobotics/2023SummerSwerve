@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.WPIUtilJNI
 import edu.wpi.first.wpilibj.ADIS16470_IMU
@@ -62,25 +61,9 @@ object Drivetrain
     private val m_rotLimiter = SlewRateLimiter(DriveConstants.kRotationalSlewRate)
     private var m_prevTime = WPIUtilJNI.now() * 1e-6
 
-    // Odometry class for tracking robot pose
-    var m_odometry = SwerveDriveOdometry(
-            DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(m_gyro.angle), arrayOf(
-            m_frontLeft.position,
-            m_frontRight.position,
-            m_rearLeft.position,
-            m_rearRight.position
-    ))
-
     override fun periodic() {
         // Update the odometry in the periodic block
-        m_odometry.update(
-                Rotation2d.fromDegrees(m_gyro.angle), arrayOf(
-                m_frontLeft.position,
-                m_frontRight.position,
-                m_rearLeft.position,
-                m_rearRight.position
-        ))
+        Odometry.update()
         Constants.ModuleConstants.Ks = SmartDashboard.getNumber("TurningKs", Constants.ModuleConstants.Ks)
         Constants.ModuleConstants.kTurningP = SmartDashboard.getNumber("TurningKP", Constants.ModuleConstants.kTurningP)
         Constants.ModuleConstants.kTurningI = SmartDashboard.getNumber("TurningKI", Constants.ModuleConstants.kTurningI)
@@ -98,7 +81,7 @@ object Drivetrain
 
     /** Current estimated pose of the robot.*/
     val pose: Pose2d
-        get() = m_odometry.poseMeters
+        get() = Odometry.SwerveOdometry.poseMeters
 
     /**
      * Resets the odometry to the specified pose.
@@ -106,14 +89,14 @@ object Drivetrain
      * @param pose The pose to which to set the odometry.
      */
     fun resetOdometry(pose: Pose2d?) {
-        m_odometry.resetPosition(
-                Rotation2d.fromDegrees(m_gyro.angle), arrayOf(
+        Odometry.SwerveOdometry.resetPosition(
+            Rotation2d.fromDegrees(NavX.getInvertedAngle()), arrayOf(
                 m_frontLeft.position,
                 m_frontRight.position,
                 m_rearLeft.position,
                 m_rearRight.position
-        ),
-                pose)
+            ),
+            pose)
     }
 
     /**
