@@ -102,6 +102,8 @@ object OI : SubsystemBase() {
     val highHat get() = operatorController.pov
     val moving get() = operatorController.getRawButton(7)
 
+    val grabTote get() = operatorController.getRawButton(9)//TODO change button
+
     enum class Direction {
         LEFT, RIGHT, UP, DOWN, INACTIVE;
 
