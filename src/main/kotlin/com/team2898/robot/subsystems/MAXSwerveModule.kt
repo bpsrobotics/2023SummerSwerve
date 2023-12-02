@@ -46,8 +46,8 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
 
         // Factory reset, so we get the SPARKS MAX to a known state before configuring
         // them. This is useful in case a SPARK MAX is swapped out.
-        m_drivingSparkMax.restoreFactoryDefaults()
-        m_turningSparkMax.restoreFactoryDefaults()
+        //m_drivingSparkMax.restoreFactoryDefaults()
+        //m_turningSparkMax.restoreFactoryDefaults()
 
         // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
         m_drivingEncoder = m_drivingSparkMax.encoder
@@ -159,7 +159,7 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         }
         SmartDashboard.putNumber("Voltage", turningVoltage)
         SmartDashboard.putNumber("error", (readEnc() - desiredState.angle.radians).absoluteValue)
-        if(readEnc().eqEpsilon(desiredState.angle.radians,0.09)) turningVoltage = 0.0
+        if(readEnc().eqEpsilon(desiredState.angle.radians,0.07)) turningVoltage = 0.0
 
         //if(reversed) m_turningSparkMax.set(-turningVoltage)
         //else m_turningSparkMax.set(turningVoltage)
