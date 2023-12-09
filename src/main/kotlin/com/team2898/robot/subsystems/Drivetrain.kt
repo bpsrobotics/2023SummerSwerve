@@ -3,6 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 package com.team2898.robot.subsystems
 
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig
+import com.pathplanner.lib.util.PIDConstants
+import com.pathplanner.lib.util.ReplanningConfig
 import com.team2898.engine.utils.SwerveUtils
 import com.team2898.robot.Constants
 import com.team2898.robot.Constants.DriveConstants
@@ -11,11 +15,14 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.WPIUtilJNI
 import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+
+
 
 object Drivetrain
     : SubsystemBase() {
@@ -61,9 +68,25 @@ object Drivetrain
     private val m_rotLimiter = SlewRateLimiter(DriveConstants.kRotationalSlewRate)
     private var m_prevTime = WPIUtilJNI.now() * 1e-6
 
+    // Odometry class for tracking robot pose
+    var m_odometry = SwerveDriveOdometry(
+            DriveConstants.kDriveKinematics,
+            Rotation2d.fromDegrees(m_gyro.angle), arrayOf(
+            m_frontLeft.position,
+            m_frontRight.position,
+            m_rearLeft.position,
+            m_rearRight.position
+    ))
+
     override fun periodic() {
         // Update the odometry in the periodic block
-        Odometry.update()
+        m_odometry.update(
+                Rotation2d.fromDegrees(m_gyro.angle), arrayOf(
+                m_frontLeft.position,
+                m_frontRight.position,
+                m_rearLeft.position,
+                m_rearRight.position
+        ))
         Constants.ModuleConstants.Ks = SmartDashboard.getNumber("TurningKs", Constants.ModuleConstants.Ks)
         Constants.ModuleConstants.kTurningP = SmartDashboard.getNumber("TurningKP", Constants.ModuleConstants.kTurningP)
         Constants.ModuleConstants.kTurningI = SmartDashboard.getNumber("TurningKI", Constants.ModuleConstants.kTurningI)
@@ -83,6 +106,9 @@ object Drivetrain
     val pose: Pose2d
         get() = Odometry.SwerveOdometry.poseMeters
 
+
+
+
     /**
      * Resets the odometry to the specified pose.
      *
@@ -98,6 +124,8 @@ object Drivetrain
             ),
             pose)
     }
+
+
 
     /**
      * Method to drive the robot using joystick info.
@@ -166,6 +194,7 @@ object Drivetrain
         m_rearLeft.setDesiredState(swerveModuleStates.get(2))
         m_rearRight.setDesiredState(swerveModuleStates.get(3))
     }
+    val driveConsumer = { x: ChassisSpeeds -> drive(Odometry.chassisSpeeds.vxMetersPerSecond,Odometry.chassisSpeeds.vyMetersPerSecond,Odometry.chassisSpeeds.omegaRadiansPerSecond, false,true) }
 
     /**
      * Sets the wheels into an X formation to prevent movement.
@@ -199,6 +228,7 @@ object Drivetrain
         m_rearRight.resetEncoders()
     }
 
+
     /** Zeroes the heading of the robot.  */
     fun zeroHeading() {
         m_gyro.reset()
@@ -209,4 +239,24 @@ object Drivetrain
     /** The turn rate of the robot, in degrees per second */
     val turnRate: Double
         get() = m_gyro.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
+    fun SwerveSubsystem() {
+        // Do all subsystem initialization here
+        // ...
+
+        // Configure the AutoBuilder last
+        AutoBuilder.configureHolonomic(
+            Odometry.poseSupplier,  // Robot pose supplier
+            Odometry.zero,  // Method to reset odometry (will be called if your auto has a starting pose)
+            Odometry.chassisSpeedsSupplier,  // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            driveConsumer,  // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                PIDConstants(5.0, 0.0, 0.0),  // Translation PID constants
+                PIDConstants(5.0, 0.0, 0.0),  // Rotation PID constants
+                1.0,  // Max module speed, in m/s
+                Constants.DriveConstants.kWheelBase,  // Drive base radius in meters. Distance from robot center to furthest module.
+                ReplanningConfig() // Default path replanning config. See the API for the options here
+            ),
+            this // Reference to this subsystem to set requirements
+        )
+    }
 }

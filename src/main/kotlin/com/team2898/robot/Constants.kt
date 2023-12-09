@@ -70,6 +70,7 @@ class Constants {
         const val kFrontRightTurningCanId = 8
         const val kRearRightTurningCanId = 6
         const val kGyroReversed = false
+        const val kToteArmCanId = 9
     }
 
     object ModuleConstants {
