@@ -8,6 +8,8 @@ import com.team2898.robot.subsystems.Drivetrain
 import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import edu.wpi.first.wpilibj2.command.InstantCommand
+import com.team2898.robot.RobotContainer
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,7 +20,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 class Robot : TimedRobot() {
     private var m_autonomousCommand: Command? = null
     private var m_robotContainer: RobotContainer? = null
-
+    var autoCommand: Command = InstantCommand({})
+    lateinit var robotContainer: RobotContainer
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -52,12 +55,9 @@ class Robot : TimedRobot() {
 
     /** This autonomous runs the autonomous command selected by your [RobotContainer] class.  */
     override fun autonomousInit() {
-        m_autonomousCommand = m_robotContainer!!.autonomousCommand
 
-        // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand!!.schedule()
-        }
+        autoCommand = robotContainer.getAutonomousCommand()
+
     }
 
     /** This function is called periodically during autonomous.  */
