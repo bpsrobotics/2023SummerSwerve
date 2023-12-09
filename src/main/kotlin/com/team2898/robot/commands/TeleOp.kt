@@ -40,7 +40,6 @@ class TeleOp : CommandBase() {
         Drivetrain.zeroHeading()
         breakTimer.start()
 
-
     }
 
     var angle = 0.0

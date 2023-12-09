@@ -59,7 +59,7 @@ object OI : SubsystemBase() {
     fun Double.process(deadzone: Boolean = false, square: Boolean = false, cube: Boolean = false) =
         process(this, deadzone, square, cube)
 
-    public val driverController = XboxController(0)
+    private val driverController = XboxController(0)
     private val operatorController = Joystick(1)
 
     // Left and right shoulder switches (the ones next to the trigger) for quickturn
