@@ -73,6 +73,8 @@ class Constants {
         const val kFrontRightTurningCanId = 8
         const val kRearRightTurningCanId = 5
         const val kGyroReversed = false
+        const val kFlywheelCanId = 10000 //TODO()
+        const val kFeddderCanId = 20000 //TODO()
     }
 
     object ModuleConstants {
@@ -147,4 +149,12 @@ class Constants {
     object NeoMotorConstants {
         const val kFreeSpeedRpm = 5676.0
     }
+
+    object ShooterConstants {
+
+        const val FlywheelFeedForward = 0.5
+
+    }
+
+
 }
