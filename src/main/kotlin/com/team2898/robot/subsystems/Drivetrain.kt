@@ -33,23 +33,25 @@ object Drivetrain
             DriveConstants.kFrontLeftTurningCanId,
             DriveConstants.kFrontLeftChassisAngularOffset,
             DriveConstants.kFrontLeftAnalogInput,
-            true)
+        "FrontLeft")
     public val m_frontRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
             DriveConstants.kFrontRightChassisAngularOffset,
             DriveConstants.kFrontRightAnalogInput,
-            true)
+        "FrontRight")
     public val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
             DriveConstants.kBackLeftChassisAngularOffset,
-            DriveConstants.kRearLeftAnalogInput)
+            DriveConstants.kRearLeftAnalogInput,
+        "RearLeft")
     public val m_rearRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
             DriveConstants.kBackRightChassisAngularOffset,
-            DriveConstants.kRearRightAnalogInput)
+            DriveConstants.kRearRightAnalogInput,
+        "RearRight")
     init{
         SmartDashboard.putNumber("TurningKs", Constants.ModuleConstants.Ks)
         SmartDashboard.putNumber("TurningKP", Constants.ModuleConstants.kTurningP)

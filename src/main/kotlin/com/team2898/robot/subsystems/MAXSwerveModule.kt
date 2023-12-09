@@ -166,8 +166,8 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         //else m_turningSparkMax.set(turningVoltage)
         m_turningSparkMax.set(-turningVoltage)
         m_desiredState = desiredState
-        SmartDashboard.putNumber("turningMotorVoltage" + moduleID, turningVoltage)
-        SmartDashboard.putNumber("drivingMotorVoltage" + moduleID, drivingVoltage)
+        //SmartDashboard.putNumber("turningMotorVoltage" + moduleID, turningVoltage)
+        //SmartDashboard.putNumber("drivingMotorVoltage" + moduleID, drivingVoltage)
     }
 
     /** Zeroes all the SwerveModule encoders.  */

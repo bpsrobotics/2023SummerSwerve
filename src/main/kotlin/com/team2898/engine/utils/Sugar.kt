@@ -71,5 +71,9 @@ object Sugar {
         val multiplier = 10.0.pow(decimalPlace).toInt()
         return round(this*multiplier)/multiplier
     }
+    fun Double.circleNormalize(): Double {
+        if(this < 0) return (this % (2* PI)) + (2*PI)
+        return this % (2*PI)
+    }
 }
 
