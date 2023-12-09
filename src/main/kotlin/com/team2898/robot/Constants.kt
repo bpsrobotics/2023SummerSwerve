@@ -53,10 +53,10 @@ class Constants {
                 Translation2d(-kWheelBase / 2, -kTrackWidth / 2))
 
         // Angular offsets of the modules relative to the chassis in radians
-        const val kFrontLeftChassisAngularOffset = 5.417924
-        const val kFrontRightChassisAngularOffset = 0.078225
-        const val kBackLeftChassisAngularOffset = 4.076745
-        const val kBackRightChassisAngularOffset = 1.721466
+        const val kFrontLeftChassisAngularOffset  = 4.940901
+        const val kFrontRightChassisAngularOffset = 0.100158
+        const val kBackLeftChassisAngularOffset   = 4.068921
+        const val kBackRightChassisAngularOffset  = 2.557114
 
         //angular
 
