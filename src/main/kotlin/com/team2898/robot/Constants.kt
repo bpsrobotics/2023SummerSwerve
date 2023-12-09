@@ -40,10 +40,10 @@ class Constants {
 
 
         // Chassis configuration
-        val kTrackWidth = Units.inchesToMeters(26.5)
+        val kTrackWidth = Units.inchesToMeters(16.0)
 
         // Distance between centers of right and left wheels on robot
-        val kWheelBase = Units.inchesToMeters(26.5)
+        val kWheelBase = Units.inchesToMeters(15.5)
 
         // Distance between front and back wheels on robot
         val kDriveKinematics = SwerveDriveKinematics(
