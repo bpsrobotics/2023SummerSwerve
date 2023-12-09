@@ -1,7 +1,9 @@
 package com.team2898.robot
 
 import edu.wpi.first.math.MathUtil
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import kotlin.math.pow
@@ -82,10 +84,20 @@ object OI : SubsystemBase() {
     /** Driver controller's throttle on the right joystick for the Y Axis, from -1 (down) to 1 (up) */
     val turnY
         get() = -process(driverController.rightY, deadzone = true, square = false)
+    val leftTrigger
+        get() = driverController.leftTriggerAxis
+    val rightTrigger
+        get() = driverController.rightTriggerAxis
     val defenseModeButton
         get() = driverController.yButton
     val normalModeButton
         get() = driverController.xButton
+    val resetGyroStart
+        get() = driverController.rightBumperPressed
+    val resetGyro
+        get() = driverController.rightBumper
+    val resetGyroEnd
+        get() = driverController.rightBumperReleased
 
     val highHat get() = operatorController.pov
     val moving get() = operatorController.getRawButton(7)
@@ -109,7 +121,27 @@ object OI : SubsystemBase() {
     }
 
     val operatorTrigger get() = operatorController.trigger
-
+    object Rumble {
+        private var isRumbling  = false
+        private var rumbleTime  = 0.0
+        private val rumblePower = 0.0
+        private val rumbleSide = GenericHID.RumbleType.kRightRumble
+        private val rumbleTimer = Timer()
+        public fun set(time: Double, power: Double, side: GenericHID.RumbleType = GenericHID.RumbleType.kBothRumble){
+            rumbleTimer.reset()
+            rumbleTime = time
+            driverController.setRumble(side, power)
+            rumbleTimer.start()
+        }
+        public fun update(){
+            if(rumbleTimer.hasElapsed(rumbleTime)){
+                driverController.setRumble(GenericHID.RumbleType.kBothRumble, 0.0)
+            }
+        }
+    }
+    override fun periodic(){
+        Rumble.update()
+    }
 
 //    init {
 //        Trigger { operatorController.pov != 0 }.toggleOnTrue(

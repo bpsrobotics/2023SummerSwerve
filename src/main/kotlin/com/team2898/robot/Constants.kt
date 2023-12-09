@@ -35,18 +35,18 @@ class Constants {
         const val kMagnitudeSlewRate = 1.8 // percent per second (1 = 100%)
         const val kRotationalSlewRate = 2.0 // percent per second (1 = 100%)
 
-        const val kFrontLeftAnalogInput = 0
+        const val kFrontLeftAnalogInput = 2
         const val kFrontRightAnalogInput = 3
-        const val kRearRightAnalogInput = 2
+        const val kRearRightAnalogInput = 0
         const val kRearLeftAnalogInput = 1
 
 
 
         // Chassis configuration
-        val kTrackWidth = Units.inchesToMeters(15.0)
+        val kTrackWidth = Units.inchesToMeters(16.0)
 
         // Distance between centers of right and left wheels on robot
-        val kWheelBase = Units.inchesToMeters(12.0)
+        val kWheelBase = Units.inchesToMeters(15.5)
 
         // Distance between front and back wheels on robot
         val kDriveKinematics = SwerveDriveKinematics(
@@ -56,22 +56,22 @@ class Constants {
                 Translation2d(-kWheelBase / 2, -kTrackWidth / 2))
 
         // Angular offsets of the modules relative to the chassis in radians
-        const val kFrontLeftChassisAngularOffset = 5.417924
-        const val kFrontRightChassisAngularOffset = 0.078225
-        const val kBackLeftChassisAngularOffset = 4.076745
-        const val kBackRightChassisAngularOffset = 1.721466
+        const val kFrontLeftChassisAngularOffset  = 4.940901
+        const val kFrontRightChassisAngularOffset = 0.100158
+        const val kBackLeftChassisAngularOffset   = 4.068921
+        const val kBackRightChassisAngularOffset  = 2.557114
 
         //angular
 
         // SPARK MAX CAN IDs
-        const val kFrontLeftDrivingCanId = 2
+        const val kFrontLeftDrivingCanId = 3
         const val kRearLeftDrivingCanId = 1
         const val kFrontRightDrivingCanId = 4
-        const val kRearRightDrivingCanId = 3
-        const val kFrontLeftTurningCanId = 6
+        const val kRearRightDrivingCanId = 2
+        const val kFrontLeftTurningCanId = 5
         const val kRearLeftTurningCanId = 7
         const val kFrontRightTurningCanId = 8
-        const val kRearRightTurningCanId = 5
+        const val kRearRightTurningCanId = 6
         const val kGyroReversed = false
     }
 
@@ -109,10 +109,10 @@ class Constants {
         const val kDrivingFF = 1 / kDriveWheelFreeSpeedRps
         const val kDrivingMinOutput = -1.0
         const val kDrivingMaxOutput = 1.0
-        var kTurningP = 3.0
+        var kTurningP = 2.0
         var kTurningI = 0.0
-        var kTurningD = 0.03
-        var Ks = 0.03
+        var kTurningD = 0.01
+        var Ks = 0.06 //0.085
         const val kTurningFF = 0.0
         const val kTurningMinOutput = -1.0
         const val kTurningMaxOutput = 1.0
@@ -126,10 +126,12 @@ class Constants {
         const val kDriverControllerPort = 0
         @Suppress("SpellCheckingInspection")
         const val kDriveDeadband = 0.05
+        const val kSpeedMultiplierMin = 0.4
+        const val kSpeedMultiplierMax = 1.0
     }
 
     object AutoConstants {
-        const val kMaxSpeedMetersPerSecond = 0.5
+        const val kMaxSpeedMetersPerSecond = 3.0
         const val kMaxAccelerationMetersPerSecondSquared = 3.0
         const val kMaxAngularSpeedRadiansPerSecond = Math.PI
         const val kMaxAngularSpeedRadiansPerSecondSquared = Math.PI

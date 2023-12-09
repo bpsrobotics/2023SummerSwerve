@@ -46,8 +46,8 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
 
         // Factory reset, so we get the SPARKS MAX to a known state before configuring
         // them. This is useful in case a SPARK MAX is swapped out.
-        m_drivingSparkMax.restoreFactoryDefaults()
-        m_turningSparkMax.restoreFactoryDefaults()
+        //m_drivingSparkMax.restoreFactoryDefaults()
+        //m_turningSparkMax.restoreFactoryDefaults()
 
         // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
         m_drivingEncoder = m_drivingSparkMax.encoder
@@ -124,11 +124,12 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
                 m_drivingEncoder.position,
                 Rotation2d(readEnc()))
 
-    /**
-     * @return The encoder position and a rotation around a circle in radians
-     */
-    fun readEnc(): Double { return ((m_turningEncoder.absolutePosition * 2.0 * PI) - m_chassisAngularOffset).circleNormalize() }
-
+    fun readEnc(): Double {
+        var encPos = (m_turningEncoder.absolutePosition * 2.0 * PI) - m_chassisAngularOffset
+        encPos %= 2 * PI
+        if(encPos < 0) return (2*PI) + encPos
+        return encPos
+    }
 
     /**
      * Sets the desired state for the module.
@@ -140,6 +141,7 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         val correctedDesiredState = SwerveModuleState()
         correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond
         correctedDesiredState.angle = desiredState.angle
+
         // Optimize the reference state to avoid spinning further than 90 degrees.
         val optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
             Rotation2d(readEnc())) //correctedDesiredState
@@ -150,23 +152,22 @@ class MAXSwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset
         m_turningPIDController.setPoint = optimizedDesiredState.angle.radians.circleNormalize()
         m_turningPIDController.kP = ModuleConstants.kTurningP
         m_turningPIDController.kD = ModuleConstants.kTurningD
-        var drivingVoltage = m_drivingSparkMax.busVoltage
         var turningVoltage = m_turningPIDController.motorOutput(readEnc())
         turningVoltage = when{
-            turningVoltage.eqEpsilon(0,0.01) -> 0.0
+            turningVoltage.eqEpsilon(0,0.04) -> 0.0
             turningVoltage < 0 -> turningVoltage - ModuleConstants.Ks
             else -> turningVoltage + ModuleConstants.Ks
         }
         SmartDashboard.putNumber("Voltage", turningVoltage)
         SmartDashboard.putNumber("error", (readEnc() - desiredState.angle.radians).absoluteValue)
-        if(readEnc().eqEpsilon(desiredState.angle.radians,0.09)) turningVoltage = 0.0
+        if(readEnc().eqEpsilon(desiredState.angle.radians,0.07)) turningVoltage = 0.0
 
         //if(reversed) m_turningSparkMax.set(-turningVoltage)
         //else m_turningSparkMax.set(turningVoltage)
         m_turningSparkMax.set(-turningVoltage)
         m_desiredState = desiredState
-        SmartDashboard.putNumber("turningMotorVoltage" + moduleID, turningVoltage)
-        SmartDashboard.putNumber("drivingMotorVoltage" + moduleID, drivingVoltage)
+        //SmartDashboard.putNumber("turningMotorVoltage" + moduleID, turningVoltage)
+        //SmartDashboard.putNumber("drivingMotorVoltage" + moduleID, drivingVoltage)
     }
 
     /** Zeroes all the SwerveModule encoders.  */
