@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.TimedRobot
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import edu.wpi.first.wpilibj2.command.InstantCommand
-import com.team2898.robot.RobotContainer
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,7 +18,6 @@ import com.team2898.robot.RobotContainer
  */
 class Robot : TimedRobot() {
     private var m_autonomousCommand: Command? = null
-    private var m_robotContainer: RobotContainer? = null
     var autoCommand: Command = InstantCommand({})
     lateinit var robotContainer: RobotContainer
     /**
@@ -30,7 +28,7 @@ class Robot : TimedRobot() {
         Drivetrain
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = RobotContainer()
+        robotContainer = RobotContainer()
     }
 
     /**
@@ -57,6 +55,7 @@ class Robot : TimedRobot() {
     override fun autonomousInit() {
 
         autoCommand = robotContainer.getAutonomousCommand()
+        autoCommand.let { autoCommand.schedule() }
 
     }
 
