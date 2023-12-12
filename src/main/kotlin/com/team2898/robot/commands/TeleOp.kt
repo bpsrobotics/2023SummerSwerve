@@ -14,7 +14,6 @@ import com.team2898.robot.Constants
 import com.team2898.robot.OI
 import com.team2898.robot.subsystems.Drivetrain
 import com.team2898.robot.subsystems.NavX
-import com.team2898.robot.subsystems.Odometry
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -86,7 +85,7 @@ class TeleOp : CommandBase() {
             resetGyroTimer.start()
         }
         if(OI.resetGyro){
-            if(resetGyroTimer.hasElapsed(1.0)){
+            if(resetGyroTimer.hasElapsed(0.5)){
                 NavX.reset()
                 OI.Rumble.set(0.25,1.0, GenericHID.RumbleType.kRightRumble)
             }
@@ -98,8 +97,11 @@ class TeleOp : CommandBase() {
     override fun execute() {
         var speedMultiplier = Constants.OIConstants.kSpeedMultiplierMin
         handleResetGyro()
-        if(OI.rightTrigger > 0.2) speedMultiplier = Constants.OIConstants.kSpeedMultiplierMax
-        if(OI.defenseModeButton) drivemode = DriveMode.Defense
+        val SpeedDif = Constants.OIConstants.kSpeedMultiplierMax - Constants.OIConstants.kSpeedMultiplierMin
+        if(OI.rightTrigger > 0.2) speedMultiplier += SpeedDif* OI.rightTrigger
+        val turnSpeed = getTurnSpeed() * speedMultiplier
+
+        /*if(OI.defenseModeButton) drivemode = DriveMode.Defense
         if(OI.normalModeButton) drivemode = DriveMode.Normal
 
         val turnSpeed = getTurnSpeed() * speedMultiplier
@@ -113,7 +115,7 @@ class TeleOp : CommandBase() {
                 breakTimer.reset()
                 breakTimerGoal = (Odometry.velocity.norm + turnSpeed / 2) / 3
             }
-        }
+        }*/
         Drivetrain.drive(
             -(OI.translationY)*speedMultiplier, //* OI.translationY.sign,
             -(OI.translationX)*speedMultiplier, //* OI.translationX.sign,

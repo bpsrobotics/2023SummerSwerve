@@ -50,6 +50,9 @@ object Odometry : SubsystemBase(), PoseProvider {
     override fun reset(x: Meters, y: Meters, theta: Degrees) {
         val p = Pose2d(x.value, y.value, Rotation2d.fromDegrees(theta.value))
     }
+    override fun periodic(){
+        update()
+    }
     override fun update(){
         NavX.update(timer.get())
         SwerveOdometry.update(

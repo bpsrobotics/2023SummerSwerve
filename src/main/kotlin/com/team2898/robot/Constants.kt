@@ -131,7 +131,7 @@ class Constants {
     }
 
     object AutoConstants {
-        const val kMaxSpeedMetersPerSecond = 3.0
+        const val kMaxSpeedMetersPerSecond = 5.0
         const val kMaxAccelerationMetersPerSecondSquared = 3.0
         const val kMaxAngularSpeedRadiansPerSecond = Math.PI
         const val kMaxAngularSpeedRadiansPerSecondSquared = Math.PI

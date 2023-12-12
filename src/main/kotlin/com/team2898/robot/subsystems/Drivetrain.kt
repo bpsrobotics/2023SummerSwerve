@@ -18,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.WPIUtilJNI
-import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
@@ -59,9 +58,6 @@ object Drivetrain
         SmartDashboard.putNumber("TurningKD", Constants.ModuleConstants.kTurningD)
 
     }
-    // The gyro sensor
-    private val m_gyro = ADIS16470_IMU()
-
     // Slew rate filter variables for controlling lateral acceleration
     private var m_currentRotation = 0.0
     private var m_currentTranslationDir = 0.0
@@ -73,7 +69,7 @@ object Drivetrain
     // Odometry class for tracking robot pose
     var m_odometry = SwerveDriveOdometry(
             DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(m_gyro.angle), arrayOf(
+            Rotation2d.fromDegrees(NavX.getInvertedAngle()), arrayOf(
             m_frontLeft.position,
             m_frontRight.position,
             m_rearLeft.position,
@@ -82,13 +78,7 @@ object Drivetrain
 
     override fun periodic() {
         // Update the odometry in the periodic block
-        m_odometry.update(
-                Rotation2d.fromDegrees(m_gyro.angle), arrayOf(
-                m_frontLeft.position,
-                m_frontRight.position,
-                m_rearLeft.position,
-                m_rearRight.position
-        ))
+
         Constants.ModuleConstants.Ks = SmartDashboard.getNumber("TurningKs", Constants.ModuleConstants.Ks)
         Constants.ModuleConstants.kTurningP = SmartDashboard.getNumber("TurningKP", Constants.ModuleConstants.kTurningP)
         Constants.ModuleConstants.kTurningI = SmartDashboard.getNumber("TurningKI", Constants.ModuleConstants.kTurningI)
@@ -117,14 +107,7 @@ object Drivetrain
      * @param pose The pose to which to set the odometry.
      */
     fun resetOdometry(pose: Pose2d?) {
-        Odometry.SwerveOdometry.resetPosition(
-            Rotation2d.fromDegrees(NavX.getInvertedAngle()), arrayOf(
-                m_frontLeft.position,
-                m_frontRight.position,
-                m_rearLeft.position,
-                m_rearRight.position
-            ),
-            pose)
+        Odometry.resetOdometry(pose)
     }
 
 
@@ -188,7 +171,7 @@ object Drivetrain
         val ySpeedDelivered: Double = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond
         val rotDelivered: Double = m_currentRotation * DriveConstants.kMaxAngularSpeed
         val swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-                if (fieldRelative) ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.angle)) else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered))
+                if (fieldRelative) ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(NavX.getInvertedAngle())) else ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered))
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond)
         m_frontLeft.setDesiredState(swerveModuleStates.get(0))
@@ -233,14 +216,14 @@ object Drivetrain
 
     /** Zeroes the heading of the robot.  */
     fun zeroHeading() {
-        m_gyro.reset()
+        NavX.reset()
     }
     /** The robot's heading in degrees, from -180 to 180 */
     val heading: Double
-        get() = Rotation2d.fromDegrees(m_gyro.angle).degrees
+        get() = Rotation2d.fromDegrees(NavX.getInvertedAngle()).degrees
     /** The turn rate of the robot, in degrees per second */
     val turnRate: Double
-        get() = m_gyro.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
+        get() = NavX.navx.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
     fun SwerveSubsystem() {
         // Do all subsystem initialization here
         // ...
