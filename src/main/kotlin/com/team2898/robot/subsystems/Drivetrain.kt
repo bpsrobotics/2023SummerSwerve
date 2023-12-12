@@ -57,7 +57,7 @@ object Drivetrain
         SmartDashboard.putNumber("TurningKP", Constants.ModuleConstants.kTurningP)
         SmartDashboard.putNumber("TurningKI", Constants.ModuleConstants.kTurningI)
         SmartDashboard.putNumber("TurningKD", Constants.ModuleConstants.kTurningD)
-
+        configureAuto()
     }
     // The gyro sensor
     private val m_gyro = ADIS16470_IMU()
@@ -126,7 +126,6 @@ object Drivetrain
             ),
             pose)
     }
-
 
 
     /**
@@ -241,7 +240,9 @@ object Drivetrain
     /** The turn rate of the robot, in degrees per second */
     val turnRate: Double
         get() = m_gyro.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
-    fun SwerveSubsystem() {
+
+
+    fun configureAuto() {
         // Do all subsystem initialization here
         // ...
 
