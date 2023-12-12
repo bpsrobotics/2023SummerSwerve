@@ -59,13 +59,12 @@ object Drivetrain
         SmartDashboard.putNumber("TurningKD", Constants.ModuleConstants.kTurningD)
         configureAuto()
     }
-    // The gyro sensor
-    private val m_gyro = ADIS16470_IMU()
+
 
     // Slew rate filter variables for controlling lateral acceleration
     private var m_currentRotation = 0.0
     private var m_currentTranslationDir = 0.0
-    private var     m_currentTranslationMag = 0.0
+    private var m_currentTranslationMag = 0.0
     private val m_magLimiter = SlewRateLimiter(DriveConstants.kMagnitudeSlewRate)
     private val m_rotLimiter = SlewRateLimiter(DriveConstants.kRotationalSlewRate)
     private var m_prevTime = WPIUtilJNI.now() * 1e-6

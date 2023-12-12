@@ -10,10 +10,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 
 class TestAuto : CommandBase() {
     private lateinit var autoCommandGroup: Command
-    val path = PathPlannerPath.fromPathFile("Test Auto")
+    val path = PathPlannerPath.fromPathFile("Back1M")
     override fun initialize() {
-        autoCommandGroup = SequentialCommandGroup (
-            AutoBuilder.followPathWithEvents(path)
+        autoCommandGroup = SequentialCommandGroup(
+            AutoBuilder.followPathWithEvents(path).andThen(AutoBuilder.followPathWithEvents(path))
+
         )
         autoCommandGroup.schedule()
     }
