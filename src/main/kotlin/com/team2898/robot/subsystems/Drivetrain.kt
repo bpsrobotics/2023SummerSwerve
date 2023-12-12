@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.WPIUtilJNI
+import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
@@ -56,8 +57,11 @@ object Drivetrain
         SmartDashboard.putNumber("TurningKP", Constants.ModuleConstants.kTurningP)
         SmartDashboard.putNumber("TurningKI", Constants.ModuleConstants.kTurningI)
         SmartDashboard.putNumber("TurningKD", Constants.ModuleConstants.kTurningD)
-
+        configureAuto()
     }
+    // The gyro sensor
+    private val m_gyro = ADIS16470_IMU()
+
     // Slew rate filter variables for controlling lateral acceleration
     private var m_currentRotation = 0.0
     private var m_currentTranslationDir = 0.0
@@ -224,7 +228,8 @@ object Drivetrain
     /** The turn rate of the robot, in degrees per second */
     val turnRate: Double
         get() = NavX.navx.rate * if (DriveConstants.kGyroReversed) -1.0 else 1.0
-    fun SwerveSubsystem() {
+
+    fun configureAuto() {
         // Do all subsystem initialization here
         // ...
 
