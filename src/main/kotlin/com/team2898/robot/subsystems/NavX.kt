@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 object NavX : SubsystemBase() {
     /** Gyroscope used on robot */
     var navx = AHRS()
-    var totalRotation = 0.0;
-    private var lastRotation = 0.0;
-    var rotationalSpeed = 0.0;
+    var totalRotation = 0.0
+    private var lastRotation = 0.0
+    var rotationalSpeed = 0.0
     /** @return The NavX's angle multiplied by -1 */
     fun getInvertedAngle(): Double{
         return -navx.angle
@@ -27,6 +27,6 @@ object NavX : SubsystemBase() {
     }
     fun reset(){
         navx.reset()
-        totalRotation = 0.0;
+        totalRotation = 0.0
     }
 }

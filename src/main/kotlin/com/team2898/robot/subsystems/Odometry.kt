@@ -36,7 +36,7 @@ object Odometry : SubsystemBase(), PoseProvider {
     /** Robot rotation speed in m/s */
     var velocity: Translation2d = Translation2d()
     private var lastPose = Pose2d()
-    private val timer = Timer();
+    private val timer = Timer()
 
     fun zero(){
         reset(Pose2d(0.0,0.0,Rotation2d.fromDegrees(0.0)))

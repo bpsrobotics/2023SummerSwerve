@@ -18,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.util.WPIUtilJNI
-import edu.wpi.first.wpilibj.ADIS16470_IMU
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
@@ -28,25 +27,25 @@ object Drivetrain
     : SubsystemBase() {
 
     // Create MAXSwerveModules
-    public val m_frontLeft: MAXSwerveModule = MAXSwerveModule(
+    val m_frontLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontLeftDrivingCanId,
             DriveConstants.kFrontLeftTurningCanId,
             DriveConstants.kFrontLeftChassisAngularOffset,
             DriveConstants.kFrontLeftAnalogInput,
         "FrontLeft")
-    public val m_frontRight: MAXSwerveModule = MAXSwerveModule(
+    val m_frontRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kFrontRightDrivingCanId,
             DriveConstants.kFrontRightTurningCanId,
             DriveConstants.kFrontRightChassisAngularOffset,
             DriveConstants.kFrontRightAnalogInput,
         "FrontRight")
-    public val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
+    val m_rearLeft: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearLeftDrivingCanId,
             DriveConstants.kRearLeftTurningCanId,
             DriveConstants.kBackLeftChassisAngularOffset,
             DriveConstants.kRearLeftAnalogInput,
         "RearLeft")
-    public val m_rearRight: MAXSwerveModule = MAXSwerveModule(
+    val m_rearRight: MAXSwerveModule = MAXSwerveModule(
             DriveConstants.kRearRightDrivingCanId,
             DriveConstants.kRearRightTurningCanId,
             DriveConstants.kBackRightChassisAngularOffset,

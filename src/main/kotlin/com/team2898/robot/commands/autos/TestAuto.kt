@@ -13,7 +13,7 @@ class TestAuto : CommandBase() {
     val path = PathPlannerPath.fromPathFile("Back1M")
     override fun initialize() {
         autoCommandGroup = SequentialCommandGroup(
-            AutoBuilder.followPathWithEvents(path).andThen(AutoBuilder.followPathWithEvents(path))
+            AutoBuilder.followPathWithEvents(path)
 
         )
         autoCommandGroup.schedule()
