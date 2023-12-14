@@ -130,6 +130,7 @@ class Constants {
         const val kToteLimitSwitchBottom = 1 //TODO
         const val kMotorCanId = 9
         const val kVolts = 1.0
+        const val kArmP = 1.0
 
 
     }

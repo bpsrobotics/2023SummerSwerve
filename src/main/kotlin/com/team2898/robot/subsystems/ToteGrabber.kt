@@ -2,6 +2,7 @@ package com.team2898.robot.subsystems
 
 import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel
+import com.team2898.engine.utils.Sugar.degreesToRadians
 import com.team2898.robot.Constants
 import com.team2898.robot.OI
 import edu.wpi.first.wpilibj.DigitalInput
@@ -19,23 +20,30 @@ object ToteGrabber : SubsystemBase(){
     private val limitSwitchTop = DigitalInput(Constants.ToteGrabberConstants.kToteLimitSwitchTop)
     private val limitSwitchBottom = DigitalInput(Constants.ToteGrabberConstants.kToteLimitSwitchBottom)
     private val armSparkMaxEncoder = armSparkMax.encoder
-    private val armMotorTemp = armSparkMax.motorTemperature
+    private val armPidController = armSparkMax.pidController
 
     init {
-
+        armPidController.p = Constants.ToteGrabberConstants.kArmP
         armSparkMax.restoreFactoryDefaults()
-        armSparkMax.setSmartCurrentLimit(40)
+        armSparkMax.setSmartCurrentLimit(2)
     }
 
     override fun periodic() {
         var speedMultiplier = Constants.ToteGrabberConstants.kVolts
+        if (armSparkMax.motorTemperature >= 50){
+            speedMultiplier = 0.0
+        }
 //        TurningPID.minCircleDist(armSparkMaxEncoder.position, desiredPosition)
         if (OI.grabTote){
+
             if (limitSwitchBottom.get()) {
                 speedMultiplier = 0.0
             }
             armSparkMax.set(1*speedMultiplier)
         } else {
+            if (armSparkMaxEncoder.position == 90.degreesToRadians()) {
+                speedMultiplier = 0.0
+            }
             if (limitSwitchTop.get()) {
                 speedMultiplier = 0.0
             }
