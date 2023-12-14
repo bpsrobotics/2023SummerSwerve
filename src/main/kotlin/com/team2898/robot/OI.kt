@@ -111,6 +111,7 @@ object OI : SubsystemBase() {
         270  -> Direction.LEFT
         else -> Direction.INACTIVE
     }
+    val operatorThrottle get() = operatorController.getRawAxis(2)
 
     val operatorTrigger get() = operatorController.trigger
 

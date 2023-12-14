@@ -5,7 +5,11 @@ import com.revrobotics.CANSparkMax
 import com.revrobotics.CANSparkMaxLowLevel
 import com.team2898.robot.Constants.DriveConstants.kFeddderCanId
 import com.team2898.robot.Constants.DriveConstants.kFlywheelCanId
-import edu.wpi.first.math.controller.SimpleMotorFeedforward
+import com.team2898.robot.Constants.ShooterConstants.kBaseFlywheelVoltage
+import com.team2898.robot.Constants.ShooterConstants.kFeederDelay
+import com.team2898.robot.Constants.ShooterConstants.kFeederVoltage
+import com.team2898.robot.Constants.ShooterConstants.kMaxFlywheelVoltage
+import com.team2898.robot.OI
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
@@ -13,53 +17,67 @@ object Shooter : SubsystemBase() {
 
     private val flywheelController = CANSparkMax(kFlywheelCanId, CANSparkMaxLowLevel.MotorType.kBrushless)
     private val feederController = CANSparkMax(kFeddderCanId, CANSparkMaxLowLevel.MotorType.kBrushless)
+    private val feederTimer = Timer()
+    private var timeLastFed = -1.0
+    private var feedBall = false
+    private fun HandleFlywheel(){
+        when {
+            OI.operatorThrottle > 0.1 -> {
+                val throttle = (OI.operatorThrottle - 0.1) * (1 / 0.9)
+                val maxThrottle = kMaxFlywheelVoltage - kBaseFlywheelVoltage
+                flywheelController.setVoltage(kBaseFlywheelVoltage + (throttle * maxThrottle))
+            }
 
-    val ready get() = (rawFlywheelSpeed - target.flywheel).value.absoluteValue < 10 &&
-            (rawSpinnerSpeed - target.spinner).value.absoluteValue < 10 &&
-            min(abs(rawFlywheelSpeed.value), abs(rawSpinnerSpeed.value)) > 10
+            OI.operatorThrottle < -0.1 -> {
+                flywheelController.setVoltage(0.0)
+            }
 
-    var target = ShooterSpeeds(0.RPM, 0.RPM)
-    var shooterPower = ShooterPowers(0.0, 0.0)
+            else -> {
+                flywheelController.setVoltage(kBaseFlywheelVoltage)
+            }
+        }
+    }
+    private fun HandleFeeder(){
+        if(OI.operatorTrigger){
+            feederTimer.start()
+            if(timeLastFed == -1.0){
+                feederTimer.reset()
+                feederTimer.start()
+            }
+            if(feederTimer.hasElapsed(timeLastFed+kFeederDelay)){
+                StartFeeder_Time()
+                feedBall = true
+            }
 
+        }
+        else {
+            feederTimer.stop()
+            timeLastFed = -1.0
+        }
+    }
+    private val feedingTime = Timer()
+    fun StartFeeder_Time(){
+        feedingTime.reset()
+        feedingTime.start()
+    }
+    fun RunFeeder_Time(){
 
-    data class ShooterSpeeds(val flywheel: RPM, val spinner: RPM)
-    data class ShooterPowers(val flywheel: Double, val spinner: Double)
-
-    private var lastShooterPos = 0.0
-    private var lastSpinnerPos = 0.0
-    private val timer = Timer()
-    init {
-        timer.start()
+        if(feedingTime.hasElapsed(0.25)){
+            feedingTime.stop()
+            feedBall = false
+            feederController.setVoltage(0.0)
+            return
+        }
+        feederController.setVoltage(kFeederVoltage)
     }
 
-    m_drivingPIDController = m_drivingSparkMax.pidController
+    fun RunFeeder_Resistance(){
 
-    private val shooterPID = flywheelController.pidController
-    private val shooterFF = flywheelController.SimpleMotorFeedForward
-    private val spinnerPID = feederController.pidController
-    private val spinnerFF = feederController.SimpleMotorFeedForward
-
-//    init {
-//        spinnerEncoder.distancePerPulse = 1.0 / 256
-//    }
-
-    private val rawFlywheelSpeed get() = ((flywheelController.encoder.position - lastShooterPos) / timer.get() * 60).RPM
-    private val rawSpinnerSpeed get() = ((spinnerController.encoder.position - lastSpinnerPos) / timer.get() * 60).RPM
-    private val filteredShooterSpeed = MovingAverage(3)
-    private val filteredSpinnerSpeed = MovingAverage(3)
-
-    init {
-        listOf(flywheelController, spinnerController).forEach {
-            it.restoreFactoryDefaults()
-            it.setSmartCurrentLimit(20)
-            it.idleMode = CANSparkMax.IdleMode.kCoast
-            it.inverted = true
-        }
-
-        flywheelController.pidController.ff = 0.0
-        flywheelController.pidController.p  = 0.0
-        flywheelController.pidController.i  = 0.0
-        flywheelController.pidController.d  = 0.0
+    }
+    override fun periodic() {
+        HandleFlywheel()
+        HandleFeeder()
+        if(feedBall) RunFeeder_Time()
     }
 
 

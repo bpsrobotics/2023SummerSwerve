@@ -152,7 +152,13 @@ class Constants {
 
     object ShooterConstants {
 
-        const val FlywheelFeedForward = 0.5
+        const val kFlywheelFeedForward  = 0.5
+        const val kBaseFlywheelVoltage  = 0.5
+        const val kMaxFlywheelVoltage   = 2
+        const val kFeederDelay          = 1.0
+        const val kFeederVoltage        = 1.0
+        const val kFeederTime           = 0.25
+
 
     }
 
