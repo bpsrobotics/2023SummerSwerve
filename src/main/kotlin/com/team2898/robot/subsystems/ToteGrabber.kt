@@ -21,6 +21,7 @@ object ToteGrabber : SubsystemBase(){
     private val limitSwitchBottom = DigitalInput(Constants.ToteGrabberConstants.kToteLimitSwitchBottom)
     private val armSparkMaxEncoder = armSparkMax.encoder
     private val armPidController = armSparkMax.pidController
+    public var ToteGrab = false
 
     init {
         armPidController.p = Constants.ToteGrabberConstants.kArmP
@@ -33,8 +34,11 @@ object ToteGrabber : SubsystemBase(){
         if (armSparkMax.motorTemperature >= 50){
             speedMultiplier = 0.0
         }
+        if(OI.grabTote){
+            ToteGrab = true
+        }
 //        TurningPID.minCircleDist(armSparkMaxEncoder.position, desiredPosition)
-        if (OI.grabTote){
+        if (ToteGrab){
 
             if (limitSwitchBottom.get()) {
                 speedMultiplier = 0.0
@@ -48,11 +52,14 @@ object ToteGrabber : SubsystemBase(){
                 speedMultiplier = 0.0
             }
             armSparkMax.set(-1*speedMultiplier)
-            SmartDashboard.putNumber("arm pos", armSparkMaxEncoder.position)
-            SmartDashboard.putNumber("arm rate", 1*speedMultiplier)
-            SmartDashboard.putBoolean("arm limit switch bottom", limitSwitchBottom.get())
-            SmartDashboard.putBoolean("arm limit switch top", limitSwitchTop.get())
+
         }
+        SmartDashboard.putNumber("arm pos", armSparkMaxEncoder.position)
+        SmartDashboard.putNumber("arm rate", 1*speedMultiplier)
+        SmartDashboard.putBoolean("arm limit switch bottom", limitSwitchBottom.get())
+        SmartDashboard.putBoolean("arm limit switch top", limitSwitchTop.get())
     }
+
+
 
 }
