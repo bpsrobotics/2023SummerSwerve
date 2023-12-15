@@ -25,6 +25,7 @@ class TestAuto : CommandBase() {
                 PIDController(Constants.ModuleConstants.kDrivingP, Constants.ModuleConstants.kDrivingI, Constants.ModuleConstants.kDrivingD),  // Translation PID constants
                 PIDController(Constants.ModuleConstants.kTurningP, Constants.ModuleConstants.kTurningI, Constants.ModuleConstants.kTurningD),  // Rotation PID constants
                 Drivetrain.driveConsumer,
+                true,
                 Drivetrain
             )
 
