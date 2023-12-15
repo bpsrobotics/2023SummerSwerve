@@ -7,9 +7,11 @@ package com.team2898.robot
 
 import com.team2898.robot.Constants.AutoConstants.commandMap
 import com.team2898.robot.commands.autos.TestAuto
+import com.team2898.robot.subsystems.Drivetrain.drive
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.PrintCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
@@ -57,8 +59,6 @@ class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
         //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand())
-    }
-    fun initEvents() {
         // guard for bot-on-board
         commandMap.put(
             "start",
@@ -69,7 +69,8 @@ class RobotContainer {
         )
         commandMap.put(
             "end", SequentialCommandGroup(
-                PrintCommand("***Path End")
+                PrintCommand("***Path End"),
+                InstantCommand({drive(0.0,0.0,0.0,false,false)})
             )
         )
         commandMap.put(
@@ -78,6 +79,7 @@ class RobotContainer {
             )
         )
     }
+
      /**
          * Use this to pass the autonomous command to the main [Robot] class.
          *

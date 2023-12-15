@@ -181,7 +181,8 @@ object Drivetrain
         m_rearLeft.setDesiredState(swerveModuleStates.get(2))
         m_rearRight.setDesiredState(swerveModuleStates.get(3))
     }
-    val driveConsumer = { x: ChassisSpeeds -> drive(Odometry.chassisSpeeds.vxMetersPerSecond,Odometry.chassisSpeeds.vyMetersPerSecond,Odometry.chassisSpeeds.omegaRadiansPerSecond, false,true) }
+    val driveConsumer = { x: ChassisSpeeds -> drive(x.vxMetersPerSecond, x.vyMetersPerSecond, x.omegaRadiansPerSecond, false, true) }
+
 
 
     /**

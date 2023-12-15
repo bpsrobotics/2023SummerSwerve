@@ -24,15 +24,22 @@ class TestAuto : CommandBase() {
                 PIDController(Constants.ModuleConstants.kDrivingP, Constants.ModuleConstants.kDrivingI, Constants.ModuleConstants.kDrivingD),  // Translation PID constants
                 PIDController(Constants.ModuleConstants.kDrivingP, Constants.ModuleConstants.kDrivingI, Constants.ModuleConstants.kDrivingD),  // Translation PID constants
                 PIDController(Constants.ModuleConstants.kTurningP, Constants.ModuleConstants.kTurningI, Constants.ModuleConstants.kTurningD),  // Rotation PID constants
-                Odometry.chassisSpeedsConsumer,
+                Drivetrain.driveConsumer,
                 Drivetrain
             )
+
+
 
         )
         autoCommandGroup.schedule()
     }
 
     override fun isFinished(): Boolean {
-        return false
+        return autoCommandGroup.isFinished
+    }
+
+    override fun end(interrupted: Boolean) {
+        println("ENDED")
+        Drivetrain.drive(0.0,0.0,0.0,false,true)
     }
 }
