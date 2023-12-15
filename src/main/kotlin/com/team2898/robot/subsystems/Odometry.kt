@@ -30,7 +30,11 @@ object Odometry : SubsystemBase(), PoseProvider {
     var poseSupplier: Supplier<Pose2d> = Supplier {pose}
 
     val chassisSpeeds = Constants.DriveConstants.kDriveKinematics.toChassisSpeeds(Drivetrain.m_frontLeft.state, Drivetrain.m_frontRight.state, Drivetrain.m_rearLeft.state, Drivetrain.m_rearRight.state)
-    val chassisSpeedsSupplier: Supplier<ChassisSpeeds> = Supplier { chassisSpeeds }
+    val chassisSpeedsConsumer = {
+        x: ChassisSpeeds -> chassisSpeeds
+        Unit
+    }
+
 
 
     /** Robot rotation speed in m/s */

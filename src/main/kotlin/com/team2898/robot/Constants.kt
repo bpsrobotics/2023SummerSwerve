@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.math.util.Units
+import edu.wpi.first.wpilibj2.command.Command
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -131,6 +133,8 @@ class Constants {
     }
 
     object AutoConstants {
+        var commandMap: MutableMap<String, Command> = HashMap<String, Command>()
+
         const val kMaxSpeedMetersPerSecond = 5.0
         const val kMaxAccelerationMetersPerSecondSquared = 3.0
         const val kMaxAngularSpeedRadiansPerSecond = Math.PI

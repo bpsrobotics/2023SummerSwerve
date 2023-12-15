@@ -4,12 +4,17 @@
 package com.team2898.robot
 
 //import com.team2898.robot.Constants.OperatorConstants
+
+import com.team2898.robot.Constants.AutoConstants.commandMap
 import com.team2898.robot.commands.autos.TestAuto
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.PrintCommand
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -52,6 +57,26 @@ class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
         //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand())
+    }
+    fun initEvents() {
+        // guard for bot-on-board
+        commandMap.put(
+            "start",
+            SequentialCommandGroup(PrintCommand("***Path Start")))
+        commandMap.put(
+            "middle",
+            SequentialCommandGroup(PrintCommand("***Path Middle"))
+        )
+        commandMap.put(
+            "end", SequentialCommandGroup(
+                PrintCommand("***Path End")
+            )
+        )
+        commandMap.put(
+            "score", SequentialCommandGroup(
+                PrintCommand("***Path score"),
+            )
+        )
     }
      /**
          * Use this to pass the autonomous command to the main [Robot] class.
