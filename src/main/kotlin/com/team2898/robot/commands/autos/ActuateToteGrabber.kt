@@ -10,9 +10,9 @@ class ActuateToteGrabber : CommandBase(){
     val timer = Timer()
     override fun initialize() {
 //        SequentialCommandGroup(SuperSimpleAuto(), SimpleBalance())
-        timer.start()
         timer.reset()
-        ToteGrabber.ToteGrabDown = true
+        timer.start()
+        ToteGrabber.actuate(true)
     }
     override fun isFinished(): Boolean {
         return timer.hasElapsed(1.0)
