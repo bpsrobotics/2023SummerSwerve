@@ -62,7 +62,10 @@ class RobotContainer {
         // guard for bot-on-board
         commandMap.put(
             "start",
-            SequentialCommandGroup(PrintCommand("***Path Start")))
+            SequentialCommandGroup(PrintCommand("***Path Start"),
+            InstantCommand({ println("path start") })
+            )
+        )
         commandMap.put(
             "middle",
             SequentialCommandGroup(PrintCommand("***Path Middle"))

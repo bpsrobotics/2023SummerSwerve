@@ -133,7 +133,7 @@ class Constants {
     }
 
     object AutoConstants {
-        var commandMap: MutableMap<String, Command> = HashMap<String, Command>()
+        var commandMap: HashMap<String, Command> = HashMap<String, Command>()
 
         const val kMaxSpeedMetersPerSecond = 5.0
         const val kMaxAccelerationMetersPerSecondSquared = 3.0
