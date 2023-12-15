@@ -34,9 +34,9 @@ object ToteGrabber : SubsystemBase(){
         if (armSparkMax.motorTemperature >= 50){
             speedMultiplier = 0.0
         }
-        if(OI.grabTote){
-            ToteGrab = true
-        }
+        if(OI.grabToteToggle){
+            ToteGrab = !ToteGrab
+
 //        TurningPID.minCircleDist(armSparkMaxEncoder.position, desiredPosition)
         if (ToteGrab){
 
@@ -58,6 +58,7 @@ object ToteGrabber : SubsystemBase(){
         SmartDashboard.putNumber("arm rate", 1*speedMultiplier)
         SmartDashboard.putBoolean("arm limit switch bottom", limitSwitchBottom.get())
         SmartDashboard.putBoolean("arm limit switch top", limitSwitchTop.get())
+        SmartDashboard.putBoolean("ToteGrab", ToteGrab)
     }
 
 

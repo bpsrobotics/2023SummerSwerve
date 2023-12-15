@@ -103,6 +103,8 @@ object OI : SubsystemBase() {
     val moving get() = operatorController.getRawButton(7)
 
     val grabTote get() = operatorController.getRawButton(9)//TODO change button
+    val grabToteToggle get() = operatorController.getRawButtonPressed(9)//TODO change button
+
 
     enum class Direction {
         LEFT, RIGHT, UP, DOWN, INACTIVE;
