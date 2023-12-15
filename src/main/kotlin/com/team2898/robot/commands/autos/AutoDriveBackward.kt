@@ -21,7 +21,7 @@ class AutoDriveBackward : CommandBase(){
         Drivetrain.drive(0.0, -0.25, 0.0, true, true)
     }
     override fun isFinished(): Boolean {
-        return timer.hasElapsed(2.4) || Odometry.SwerveOdometry.poseMeters.y > 1
+        return timer.hasElapsed(2.4) || Odometry.SwerveOdometry.poseMeters.y < 1
     }
 
 }

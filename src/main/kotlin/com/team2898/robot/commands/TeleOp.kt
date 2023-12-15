@@ -40,7 +40,7 @@ class TeleOp : CommandBase() {
         //SmartDashboard.putNumber("goal", PI)
         Drivetrain.zeroHeading()
         breakTimer.start()
-        ToteGrabber.ToteGrab = false
+        ToteGrabber.ToteGrabDown = false
 
     }
 

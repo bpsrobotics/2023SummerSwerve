@@ -22,7 +22,8 @@ object ToteGrabber : SubsystemBase() {
     private val limitSwitchBottom = DigitalInput(Constants.ToteGrabberConstants.kToteLimitSwitchBottom)
     private val armSparkMaxEncoder = armSparkMax.encoder
     private val armPidController = armSparkMax.pidController
-    public var ToteGrab = false
+    public var ToteGrabDown = false
+    public var Stopped = false
 
     init {
         armPidController.p = Constants.ToteGrabberConstants.kArmP
@@ -35,33 +36,26 @@ object ToteGrabber : SubsystemBase() {
         if (armSparkMax.motorTemperature >= 50) {
             speedMultiplier = 0.0
         }
-        if (OI.grabToteToggle) {
-            ToteGrab = !ToteGrab
-
+        if (OI.grabToteToggle) actuate(!ToteGrabDown)
 //        TurningPID.minCircleDist(armSparkMaxEncoder.position, desiredPosition)
-            if (ToteGrab) {
+        if (ToteGrabDown) {
 
-                if (limitSwitchBottom.get()) {
-                    speedMultiplier = 0.0
-                }
-                armSparkMax.set(1 * speedMultiplier)
-            } else {
-                if (armSparkMaxEncoder.position == 90.degreesToRadians()) {
-                    speedMultiplier = 0.0
-                }
-                if (limitSwitchTop.get()) {
-                    speedMultiplier = 0.0
-                }
-                armSparkMax.set(-1 * speedMultiplier)
+            if (limitSwitchBottom.get()) Stopped = true
+            if(!Stopped) armSparkMax.setVoltage(1.0)
+        } else {
+            if (armSparkMaxEncoder.position >= 90.degreesToRadians()) Stopped = true
+            if (limitSwitchTop.get()) Stopped = true
+            if(!ToteGrabDown) armSparkMax.setVoltage(-1.0)
 
-            }
-            SmartDashboard.putNumber("arm pos", armSparkMaxEncoder.position)
-            SmartDashboard.putNumber("arm rate", 1 * speedMultiplier)
-            SmartDashboard.putBoolean("arm limit switch bottom", limitSwitchBottom.get())
-            SmartDashboard.putBoolean("arm limit switch top", limitSwitchTop.get())
-            SmartDashboard.putBoolean("ToteGrab", ToteGrab)
         }
-
-
+        SmartDashboard.putNumber("arm pos", armSparkMaxEncoder.position)
+        SmartDashboard.putNumber("arm rate", 1 * speedMultiplier)
+        SmartDashboard.putBoolean("arm limit switch bottom", limitSwitchBottom.get())
+        SmartDashboard.putBoolean("arm limit switch top", limitSwitchTop.get())
+        SmartDashboard.putBoolean("ToteGrab", ToteGrabDown)
+    }
+    fun actuate(down: Boolean){
+        ToteGrabDown = down
+        Stopped = false
     }
 }
