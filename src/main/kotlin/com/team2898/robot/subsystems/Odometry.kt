@@ -45,7 +45,7 @@ object Odometry : SubsystemBase(), PoseProvider {
     fun zero(){
         reset(Pose2d(0.0,0.0,Rotation2d.fromDegrees(0.0)))
     }
-    val zero = { x : Pose2d -> zero() }
+    val zero = { p : Pose2d -> reset(p)}
 
     init {
         timer.start()
