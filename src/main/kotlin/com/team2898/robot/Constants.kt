@@ -133,6 +133,15 @@ class Constants {
         const val kSpeedMultiplierMin = 0.4
         const val kSpeedMultiplierMax = 1.0
     }
+    object ToteGrabberConstants{
+        const val kToteLimitSwitchTop = 0 //TODO
+        const val kToteLimitSwitchBottom = 1 //TODO
+        const val kMotorCanId = 9
+        const val kVolts = 1.0
+        const val kArmP = 1.0
+
+
+    }
 
     object AutoConstants {
         var commandMap: HashMap<String, Command> = HashMap<String, Command>()
