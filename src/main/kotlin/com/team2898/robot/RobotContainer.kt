@@ -4,11 +4,19 @@
 package com.team2898.robot
 
 //import com.team2898.robot.Constants.OperatorConstants
+
+import com.team2898.robot.Constants.AutoConstants.commandMap
 import com.team2898.robot.commands.autos.TestAuto
+import com.team2898.robot.subsystems.Drivetrain.drive
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
+import edu.wpi.first.wpilibj2.command.PrintCommand
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.Trigger
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,23 +27,28 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 class RobotContainer {
     // The robot's subsystems and commands are defined here...
     //private val m_exampleSubsystem = ExampleSubsystem()
-
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    @Suppress("PrivatePropertyName", "unused")
     private val m_driverController = CommandXboxController(0)
 
-    private val nullAuto: Command = TestAuto()
     private var autoCommandChooser: SendableChooser<Command> = SendableChooser()
+
+
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
     init {
-        autoCommandChooser.setDefaultOption("no auto", nullAuto)
         // Configure the trigger bindings
-//        configureBindings()
+        configureBindings()
+        autoCommandChooser.setDefaultOption("test auto", TestAuto())
+        SmartDashboard.putData("Auto mode", autoCommandChooser)
+
+
+    }
+    fun getAutonomousCommand(): Command{
+        return autoCommandChooser.selected
     }
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
-     * Trigger.Trigger constructor with an arbitrary
+     * [Trigger.Trigger] constructor with an arbitrary
      * predicate, or via the named factories in [ ]'s subclasses for [ ]/[ PS4][edu.wpi.first.wpilibj2.command.button.CommandPS4Controller] controllers or [Flight][edu.wpi.first.wpilibj2.command.button.CommandJoystick].
      */
     private fun configureBindings() {
@@ -46,17 +59,35 @@ class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
         //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand())
+        // guard for bot-on-board
+        commandMap.put(
+            "start",
+            SequentialCommandGroup(PrintCommand("***Path Start"),
+            InstantCommand({ println("path start") })
+            )
+        )
+        commandMap.put(
+            "middle",
+            SequentialCommandGroup(PrintCommand("***Path Middle"))
+        )
+        commandMap.put(
+            "end", SequentialCommandGroup(
+                PrintCommand("***Path End"),
+                InstantCommand({drive(0.0,0.0,0.0,false,false)})
+            )
+        )
+        commandMap.put(
+            "score", SequentialCommandGroup(
+                PrintCommand("***Path score"),
+            )
+        )
     }
 
-//    val autonomousCommand: Command = InstantCommand({})
-        /**
+     /**
          * Use this to pass the autonomous command to the main [Robot] class.
          *
          * @return the command to run in autonomous
          */
-    fun getAutonomousCommand(): Command{
-         return TestAuto()
-    }
         // An example command will be run in autonomous
 
             //Autos.exampleAuto(m_exampleSubsystem)

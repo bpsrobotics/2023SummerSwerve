@@ -21,34 +21,9 @@ object Sugar {
     fun Double.radiansToDegrees(): Double {
         return times(180 / PI)
     }
-    /**
-     * Returns true if the value is [maxDistance] from [target]
-     * @param target The target value
-     * @param maxDistance The greatest distance from the target value that will still return true
-     * @author Ozy
-     */
-    fun Double.eqEpsilon(target: Double, maxDistance:Double = 0.01) = (this - target).absoluteValue < maxDistance
-    /**
-     * Returns true if the value is [maxDistance] from [target]
-     * @param target The target value
-     * @param maxDistance The greatest distance from the target value that will still return true
-     * @author Ozy
-     */
-    fun Double.eqEpsilon(target: Int, maxDistance:Double = 0.01) = (this - target).absoluteValue < maxDistance
-    /**
-     * Returns true if the value is [maxDistance] from [target]
-     * @param target The target value
-     * @param maxDistance The greatest distance from the target value that will still return true
-     * @author Ozy
-     */
-    fun Int.eqEpsilon(target: Double, maxDistance:Double = 0.01) = (this - target).absoluteValue < maxDistance
-    /**
-     * Returns true if the value is [maxDistance] from [target]
-     * @param target The target value
-     * @param maxDistance The greatest distance from the target value that will still return true
-     * @author Ozy
-     */
-    fun Int.eqEpsilon(target: Int, maxDistance:Double = 0.01) = (this - target).absoluteValue < maxDistance
+
+    fun Double.eqEpsilon(other: Double, maxDistance:Double = 0.01) = (this - other).absoluteValue < maxDistance
+    fun Double.eqEpsilon(other: Int,maxDistance:Double = 0.01) = (this - other).absoluteValue < maxDistance
 
 
     /**
@@ -83,18 +58,7 @@ object Sugar {
      * Clamps this double to be within the range [min]..[max], inclusive.
      */
     fun Double.clamp(min: Double = 0.0, max: Double = 1.0) = this.coerceIn(min, max)
-    /**
-     * Clamps this double to be within the range [min]..[max], inclusive.
-     */
-    fun Int.clamp(min: Int = 0, max: Int = 1) = this.coerceIn(min, max)
-
-    /**
-     * Convert an angle to an equivalent rotation between 0 and 2PI
-     */
-    fun Double.circleNormalize(): Double {
-        if(this < 0) return (this % (2* PI)) + (2*PI)
-        return this % (2*PI)
-    }
+    fun Double.clamp(min: Int = 0, max: Int = 1) = this.coerceIn(min*1.0, max*1.0)
 
     /**
      * Finds angle difference between two angles in radians
@@ -103,12 +67,13 @@ object Sugar {
         val a = angle1 - angle2
         return (a + PI).mod(2.0 * PI) - PI
     }
-    /**
-     * Rounds the value to [decimalPlace] places
-     */
     fun Double.roundTo(decimalPlace: Int) : Double{
         val multiplier = 10.0.pow(decimalPlace).toInt()
         return round(this*multiplier)/multiplier
+    }
+    fun Double.circleNormalize(): Double {
+        if(this < 0) return (this % (2* PI)) + (2*PI)
+        return this % (2*PI)
     }
 }
 

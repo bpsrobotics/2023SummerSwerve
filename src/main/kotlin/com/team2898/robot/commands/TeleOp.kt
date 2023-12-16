@@ -14,10 +14,11 @@ import com.team2898.robot.Constants
 import com.team2898.robot.OI
 import com.team2898.robot.subsystems.Drivetrain
 import com.team2898.robot.subsystems.NavX
-import com.team2898.robot.subsystems.Odometry
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.CommandBase
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sign
@@ -38,7 +39,6 @@ class TeleOp : CommandBase() {
         Drivetrain.zeroHeading()
         breakTimer.start()
 
-
     }
 
     var angle = 0.0
@@ -48,11 +48,10 @@ class TeleOp : CommandBase() {
     val breakTimer = Timer()
     var breakTimerGoal = 0.0
     var drivemode = DriveMode.Normal
-    var turnSpeed = 0.0
-
+    var resetGyroTimer = Timer()
     // Called every time the scheduler runs while the command is scheduled.
     fun turnSpeedNormal():Double {
-        return OI.turnX
+        return -OI.turnX
     }
     fun turnSpeedDefense():Double {
         angle += OI.turnX.pow(2).degreesToRadians() * -5 * OI.turnX.sign
@@ -64,6 +63,7 @@ class TeleOp : CommandBase() {
         return turnSpeed
     }
     fun turnSpeedFieldOriented(): Double {
+        if((abs(OI.turnY)+abs(OI.turnX)).eqEpsilon(0,0.2)) return 0.0
         angle = atan2(OI.turnY,OI.turnX)
         SmartDashboard.putNumber("angle", angle)
 
@@ -79,13 +79,33 @@ class TeleOp : CommandBase() {
             else -> turnSpeedNormal()
         }
     }
+    fun handleResetGyro(){
+        if(OI.resetGyroStart){
+            resetGyroTimer.reset()
+            resetGyroTimer.start()
+        }
+        if(OI.resetGyro){
+            if(resetGyroTimer.hasElapsed(0.5)){
+                NavX.reset()
+                OI.Rumble.set(0.25,1.0, GenericHID.RumbleType.kRightRumble)
+            }
+        }
+        if(OI.resetGyroEnd){
+            resetGyroTimer.stop()
+        }
+    }
     override fun execute() {
-        turnSpeed = getTurnSpeed()
-
         var speedMultiplier = Constants.OIConstants.kSpeedMultiplierMin
-        if(OI.rightTrigger > 0.2) speedMultiplier = Constants.OIConstants.kSpeedMultiplierMax
-        if(OI.defenseModeButton) drivemode = DriveMode.Defense
+        handleResetGyro()
+        val SpeedDif = Constants.OIConstants.kSpeedMultiplierMax - Constants.OIConstants.kSpeedMultiplierMin
+        if(OI.rightTrigger > 0.2) speedMultiplier += SpeedDif* OI.rightTrigger
+        val turnSpeed = getTurnSpeed() * speedMultiplier
+
+        /*if(OI.defenseModeButton) drivemode = DriveMode.Defense
         if(OI.normalModeButton) drivemode = DriveMode.Normal
+
+        val turnSpeed = getTurnSpeed() * speedMultiplier
+
         if(drivemode == DriveMode.Defense) {
             if (OI.translationX == 0.0 && OI.translationY == 0.0 && turnSpeed.eqEpsilon(0, 0.04)) {
                 if (breakTimer.hasElapsed(breakTimerGoal)) Drivetrain.lock()
@@ -95,7 +115,7 @@ class TeleOp : CommandBase() {
                 breakTimer.reset()
                 breakTimerGoal = (Odometry.velocity.norm + turnSpeed / 2) / 3
             }
-        }
+        }*/
         Drivetrain.drive(
             -(OI.translationY)*speedMultiplier, //* OI.translationY.sign,
             -(OI.translationX)*speedMultiplier, //* OI.translationX.sign,
