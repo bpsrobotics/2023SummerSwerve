@@ -75,8 +75,8 @@ class Constants {
         const val kFrontRightTurningCanId = 8
         const val kRearRightTurningCanId = 6
         const val kGyroReversed = false
-        const val kFlywheelCanId = 10000 //TODO()
-        const val kFeddderCanId = 20000 //TODO()
+        const val kFlywheelCanId = 9
+        const val kFeddderCanId = 10
     }
 
     object ModuleConstants {
