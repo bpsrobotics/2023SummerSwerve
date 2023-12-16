@@ -11,11 +11,12 @@ import com.team2898.robot.subsystems.Odometry
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandBase
+import edu.wpi.first.wpilibj2.command.InstantCommand
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 
 class TestAuto : CommandBase() {
     private lateinit var autoCommandGroup: Command
-    val path = PathPlanner.loadPath("Back1M", 1.0,1.0)
+    val path = PathPlanner.loadPath("Back1M", 0.2,1.0)
     override fun initialize() {
         autoCommandGroup = SequentialCommandGroup(
             PPSwerveControllerCommand(
@@ -27,7 +28,7 @@ class TestAuto : CommandBase() {
                 Drivetrain.driveConsumer,
                 true,
                 Drivetrain
-            )
+            ).andThen(InstantCommand({Drivetrain.drive(0.0,0.0,0.0,true,true)}))
 
 
 
@@ -41,6 +42,6 @@ class TestAuto : CommandBase() {
 
     override fun end(interrupted: Boolean) {
         println("ENDED")
-        Drivetrain.drive(0.0,0.0,0.0,false,true)
+        autoCommandGroup.cancel()
     }
 }
