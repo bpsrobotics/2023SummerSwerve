@@ -7,6 +7,7 @@ package com.team2898.robot
 
 import com.team2898.robot.Constants.AutoConstants.commandMap
 import com.team2898.robot.commands.autos.TestAuto
+import com.team2898.robot.commands.autos.TestAuto2
 import com.team2898.robot.subsystems.Drivetrain.drive
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -37,7 +38,9 @@ class RobotContainer {
     init {
         // Configure the trigger bindings
         configureBindings()
-        autoCommandChooser.setDefaultOption("test auto", TestAuto())
+        autoCommandChooser.addOption("test auto", TestAuto())
+        autoCommandChooser.setDefaultOption("testAuto2", TestAuto2())
+
         SmartDashboard.putData("Auto mode", autoCommandChooser)
 
 

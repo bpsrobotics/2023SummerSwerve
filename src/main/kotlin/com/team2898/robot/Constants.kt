@@ -31,7 +31,7 @@ class Constants {
     object DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        const val kMaxSpeedMetersPerSecond = 2.0
+        const val kMaxSpeedMetersPerSecond = 5.0
         const val kMaxAngularSpeed = 2 * Math.PI // radians per second (2*PI)
         const val kDirectionSlewRate = 1.2 // radians per second
         const val kMagnitudeSlewRate = 1.8 // percent per second (1 = 100%)
@@ -75,8 +75,8 @@ class Constants {
         const val kFrontRightTurningCanId = 8
         const val kRearRightTurningCanId = 6
         const val kGyroReversed = false
-        const val kFlywheelCanId = 10000 //TODO()
-        const val kFeddderCanId = 20000 //TODO()
+        const val kFlywheelCanId = 9
+        const val kFeddderCanId = 10
     }
 
     object ModuleConstants {
@@ -122,8 +122,8 @@ class Constants {
         const val kTurningMaxOutput = 1.0
         val kDrivingMotorIdleMode = IdleMode.kCoast
         val kTurningMotorIdleMode = IdleMode.kCoast
-        const val kDrivingMotorCurrentLimit = 50 // amps
-        const val kTurningMotorCurrentLimit = 20 // amps
+        const val kDrivingMotorCurrentLimit = 40 // amps
+        const val kTurningMotorCurrentLimit = 10 // amps
     }
 
     object OIConstants {
@@ -157,11 +157,12 @@ class Constants {
     object ShooterConstants {
 
         const val kFlywheelFeedForward  = 0.5
-        const val kBaseFlywheelVoltage  = 0.5
-        const val kMaxFlywheelVoltage   = 2
-        const val kFeederDelay          = 1.0
-        const val kFeederVoltage        = 1.0
+        const val kBaseFlywheelVoltage  = 1.5
+        const val kMaxFlywheelVoltage   = 7.0
+        const val kFeederDelay          = 1.5
+        const val kFeederVoltage        = 4.0
         const val kFeederTime           = 0.25
+        const val kFlywheelCurrent = 20
 
 
     }
